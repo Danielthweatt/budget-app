@@ -1,0 +1,25 @@
+{
+  "name": "budget-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Danielthweatt/budget-app.git"
+  },
+  "author": "Daniel Thweatt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Danielthweatt/budget-app/issues"
+  },
+  "homepage": "https://github.com/Danielthweatt/budget-app#readme",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "morgan": "^1.10.0"
+  }
+}
