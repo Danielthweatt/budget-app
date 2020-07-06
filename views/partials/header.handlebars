@@ -4,20 +4,16 @@
             <div class="navbar-item">
                 <strong>Budget App</strong>
             </div>
-            {{#if user}}
-                <a class="navbar-burger">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
-            {{/if}}
+            <a class="navbar-burger">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
         </div>
-        {{#if user}}
-            <div class="navbar-menu">
+        <div class="navbar-menu">
+            {{#if user}}
                 <div class="navbar-start">
-                    <a class="navbar-item" href="/" >
-                        Home
-                    </a>
+                    <a class="navbar-item" href="/dashboard" >Dashboard</a>
                 </div>
                 <div class="navbar-end">
                     <div class="navbar-item">
@@ -26,20 +22,29 @@
                         </a>
                     </div>
                 </div>
-            </div>
-        {{/if}}
+            {{else}}
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/" >Home</a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <a class="button is-light" href="/login" >
+                            <strong>Login</strong>
+                        </a>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
     </nav>
-    {{#if user}}
-        <script>
-            //https://bulma.io/documentation/components/navbar/
-            $(document).ready(function() {
-                //Check for click events on the navbar burger icon
-                $(".navbar-burger").click(function() {
-                    //Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-                    $(".navbar-burger").toggleClass("is-active");
-                    $(".navbar-menu").toggleClass("is-active");
-                });
+    <script>
+        //https://bulma.io/documentation/components/navbar/
+        $(document).ready(function() {
+            //Check for click events on the navbar burger icon
+            $(".navbar-burger").click(function() {
+                //Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                $(".navbar-burger").toggleClass("is-active");
+                $(".navbar-menu").toggleClass("is-active");
             });
-        </script>
-    {{/if}}
+        });
+    </script>
 </header>

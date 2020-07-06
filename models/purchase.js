@@ -4,6 +4,7 @@ const purchaseSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true
+        //Use enum???
     },
     description: {
         type: String,
@@ -11,7 +12,8 @@ const purchaseSchema = new mongoose.Schema({
     },
     amount: {
         type: Number,
-        required: true
+        required: true,
+        min: 0.01
     }
 });
 
