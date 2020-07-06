@@ -1,0 +1,45 @@
+<header>
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <strong>Budget App</strong>
+            </div>
+            {{#if user}}
+                <a class="navbar-burger">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            {{/if}}
+        </div>
+        {{#if user}}
+            <div class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="/" >
+                        Home
+                    </a>
+                </div>
+                <div class="navbar-end">
+                    <div class="navbar-item">
+                        <a class="button is-light" href="/logout" >
+                            <strong>Logout</strong>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {{/if}}
+    </nav>
+    {{#if user}}
+        <script>
+            //https://bulma.io/documentation/components/navbar/
+            $(document).ready(function() {
+                //Check for click events on the navbar burger icon
+                $(".navbar-burger").click(function() {
+                    //Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    $(".navbar-burger").toggleClass("is-active");
+                    $(".navbar-menu").toggleClass("is-active");
+                });
+            });
+        </script>
+    {{/if}}
+</header>
