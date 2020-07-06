@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const purchaseSchema = new mongoose.Schema({
     category: {
         type: String,
-        required: true
+        required: true,
+        lowercase: true
         //Use enum???
     },
     description: {
