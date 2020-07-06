@@ -1,19 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const exphbs = require('express-handlebars');
+const config = require('config');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const debug = require('debug')('app:boot');
+const exphbs = require('express-handlebars');
 const router = require('./routes');
 
 //Express App
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || config.get('expressConfig.port');
 const app = express();
 
 debug('Express app generated...');
 
 //MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/budget_app').then(() => {
+mongoose.connect(process.env.MONGODB_URI || `mongodb://${config.get('dbConfig.host')}/${config.get('dbConfig.dbName')}`).then(() => {
     debug('Connected to MongoDB...');
 }).catch(err => {
     debug('Could not connect to MongoDB...');

@@ -1,0 +1,9 @@
+{
+    "expressConfig": {
+        "port": 3000
+    },
+    "dbConfig": {
+        "host": "localhost",
+        "dbName": "budget_app"
+    }
+}
