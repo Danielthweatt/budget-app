@@ -1,21 +1,28 @@
 const mongoose = require('mongoose');
+const { purchaseCategorySchema } = require('./purchaseCategory');
 
 const purchaseSchema = new mongoose.Schema({
     category: {
-        type: String,
-        required: true,
-        lowercase: true
-        //Use enum???
+        type: purchaseCategorySchema,
+        required: true
     },
     description: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     amount: {
         type: Number,
         required: true,
         min: 0.01
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 });
 
-module.exports = mongoose.model('Purchase', purchaseSchema);
+module.exports = {
+    purchaseSchema,
+    Purchase: mongoose.model('Purchase', purchaseSchema)
+};

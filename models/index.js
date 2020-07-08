@@ -1,3 +1,5 @@
 module.exports = {
-	Purchase: require('./purchase')
+	Budget: require('./budget').Budget,
+	PurchaseCategory: require('./purchaseCategory').PurchaseCategory,
+	Purchase: require('./purchase').Purchase
 };
