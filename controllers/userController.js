@@ -7,6 +7,12 @@ module.exports = {
         debug('Rendering home view...');
         res.render('home', { title: 'Home' });
     },
+    getSignUpForm(req, res) {
+        debug('getSignUpForm()');
+
+        debug('Rendering sign up form view...');
+        res.render('sign-up-form', { title: 'Sign Up' });
+    },
     getLoginForm(req, res) {
         debug('getLoginForm()');
 
