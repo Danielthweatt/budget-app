@@ -1,27 +1,57 @@
+const Joi = require('@hapi/joi');
 const debug = require('debug')('app:userController');
+
+function validateNewUser(newUser) {
+    const newUserSchema = Joi.object({
+        username: Joi.string().min(3).max(50).required(),
+        email: Joi.string().email({ minDomainSegments: 2 }),
+        password: Joi.string().min(5).max(255).required(),
+        confirmPassword: Joi.ref('password')
+    }).with('password', 'confirmPassword');
+
+    return newUserSchema.validate(newUser);
+}
 
 module.exports = {
     getHome(req, res) {
         debug('getHome()');
 
         debug('Rendering home view...');
-        res.render('home', { title: 'Home' });
+
+        return res.render('home', { title: 'Home' });
     },
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
 
         debug('Rendering sign up form view...');
-        res.render('sign-up-form', { title: 'Sign Up' });
-    },
-    postSignUpForm(req, res) {
-        debug('postSignUpForm()');
 
+        return res.render('sign-up-form', { title: 'Sign Up' });
+    },
+    async postSignUpForm(req, res) {
+        debug('postSignUpForm()');
+        debug('Validating user...');
+        
+        const { error } = await validateNewUser(req.body);
+
+        if (error) {
+            debug('Validation error...');
+            debug(error.details[0].message);
+            debug('Redirecting to sign-up form...');
+
+            return res.redirect('/sign-up');
+        }
+
+        debug('User signed up succesfully...');
+        debug('Redirecting to login form...');
+
+        return res.rediect('/login');
     },
     getLoginForm(req, res) {
         debug('getLoginForm()');
 
         debug('Rendering login form view...');
-        res.render('login-form', { title: 'Login' });
+
+        return res.render('login-form', { title: 'Login' });
     },
     getDashboard(req, res) {
         debug('getDashboard()');
@@ -29,7 +59,8 @@ module.exports = {
         const user = { name: 'John Smith' };
 
         debug('Rendering dashboard view...');
-        res.render('dashboard', { 
+
+        return res.render('dashboard', { 
             title: 'Dashboard',
             user
         });
@@ -38,6 +69,7 @@ module.exports = {
         debug('getLogout()');
 
         debug('Redirecting to home...');
-        res.redirect('/');
+        
+        return res.redirect('/');
     },
 };
