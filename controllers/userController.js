@@ -13,6 +13,10 @@ module.exports = {
         debug('Rendering sign up form view...');
         res.render('sign-up-form', { title: 'Sign Up' });
     },
+    postSignUpForm(req, res) {
+        debug('postSignUpForm()');
+
+    },
     getLoginForm(req, res) {
         debug('getLoginForm()');
 
