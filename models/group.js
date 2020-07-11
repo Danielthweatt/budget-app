@@ -11,5 +11,5 @@ const groupSchema = new mongoose.Schema({
 
 module.exports = {
     groupSchema,
-    Group: mongoose.model('User', groupSchema)
+    Group: mongoose.model('Group', groupSchema)
 };

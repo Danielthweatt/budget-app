@@ -1,4 +1,6 @@
+const { User } = require('../models');
 const Joi = require('@hapi/joi');
+const bcrypt = require('bcrypt');
 const debug = require('debug')('app:userController');
 
 function validateNewUser(newUser) {
@@ -29,9 +31,12 @@ module.exports = {
     },
     async postSignUpForm(req, res) {
         debug('postSignUpForm()');
+
+        const body = req.body;
+
         debug('Validating user...');
         
-        const { error } = await validateNewUser(req.body);
+        const { error } = await validateNewUser(body);
 
         if (error) {
             debug('Validation error...');
@@ -41,10 +46,25 @@ module.exports = {
             return res.redirect('/sign-up');
         }
 
+        const { username, email, password } = body;
+        let user = await User.findOne({ username });
+
+        if (user) {
+            debug('User already exists...');
+            debug('Redirecting to sign-up form...');
+
+            return res.redirect('/sign-up');
+        }
+
+        user = new User({ username, email, password });
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(user.password, salt);
+        await user.save();
+
         debug('User signed up succesfully...');
         debug('Redirecting to login form...');
 
-        return res.rediect('/login');
+        return res.redirect('/login');
     },
     getLoginForm(req, res) {
         debug('getLoginForm()');
@@ -62,14 +82,14 @@ module.exports = {
 
         return res.render('dashboard', { 
             title: 'Dashboard',
-            user
+            testUser
         });
     },
     getLogout(req, res) {
         debug('getLogout()');
 
         debug('Redirecting to home...');
-        
+
         return res.redirect('/');
     },
 };
