@@ -5,5 +5,8 @@
     "dbConfig": {
         "host": "localhost",
         "dbName": "budget_app"
+    },
+    "sessionConfig": {
+        "secret": "aSecretString"
     }
 }

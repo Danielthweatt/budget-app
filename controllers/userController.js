@@ -11,7 +11,7 @@ function validateNewUser(newUser) {
         confirmPassword: Joi.ref('password')
     }).with('password', 'confirmPassword');
 
-    return newUserSchema.validate(newUser);
+    return newUserSchema.validate(newUser, { abortEarly: false });
 }
 
 module.exports = {
@@ -24,10 +24,13 @@ module.exports = {
     },
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
-
+        
         debug('Rendering sign up form view...');
 
-        return res.render('sign-up-form', { title: 'Sign Up' });
+        return res.render('sign-up-form', { 
+            title: 'Sign Up',
+            validationError: req.flash.validationError || null
+        });
     },
     async postSignUpForm(req, res) {
         debug('postSignUpForm()');
@@ -39,11 +42,13 @@ module.exports = {
         const { error } = await validateNewUser(body);
 
         if (error) {
-            debug('Validation error...');
+            debug('Validation errors:');
 
             error.details.forEach(({ message }) => debug(message));
 
             debug('Redirecting to sign-up form...');
+            
+            req.session.flash.validationError = error;
 
             return res.redirect('/sign-up');
         }
@@ -61,6 +66,7 @@ module.exports = {
         user = new User({ username, email, password });
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt);
+        
         await user.save();
 
         debug('User signed up succesfully...');
