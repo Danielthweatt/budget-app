@@ -17,7 +17,6 @@ function validateNewUser(newUser) {
 module.exports = {
     getHome(req, res) {
         debug('getHome()');
-
         debug('Rendering home view...');
 
         return res.render('home', { title: 'Home' });
@@ -29,7 +28,7 @@ module.exports = {
 
         return res.render('sign-up-form', { 
             title: 'Sign Up',
-            validationError: req.flash.validationError || null
+            formSubmissionError: req.getFlashData('formSubmissionError') || null
         });
     },
     async postSignUpForm(req, res) {
@@ -48,7 +47,7 @@ module.exports = {
 
             debug('Redirecting to sign-up form...');
             
-            req.session.flash.validationError = error;
+            req.setFlashData('formSubmissionError', error);
 
             return res.redirect('/sign-up');
         }
@@ -59,6 +58,14 @@ module.exports = {
         if (user) {
             debug('User already exists...');
             debug('Redirecting to sign-up form...');
+
+            req.setFlashData('formSubmissionError', {
+                details: [
+                    {
+                        message: "There is already a user by that username."
+                    }
+                ]
+            });
 
             return res.redirect('/sign-up');
         }

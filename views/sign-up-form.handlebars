@@ -3,8 +3,8 @@
         <div class="columns">
             <div class="column is-half is-offset-one-quarter">
                 <h1 class="title is-1">Sign Up</h1>
-                {{#if validationError}}
-                    {{> validation-errors}}
+                {{#if formSubmissionError}}
+                    {{> form-submission-errors}}
                 {{/if}}
                 <form method="POST" action="/sign-up">
                     <div class="field">

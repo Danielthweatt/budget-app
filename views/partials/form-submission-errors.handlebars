@@ -1,6 +1,6 @@
 <div class="notification is-danger is-light">
     <ul class="unordered-list" >
-        {{#each validationError.details}}  
+        {{#each formSubmissionError.details}}  
             {{#with this}}
                 <li>{{message}}</li>
             {{/with}}

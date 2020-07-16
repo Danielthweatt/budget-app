@@ -1,13 +1,25 @@
 module.exports = function(req, res, next) {
-    //Set flash data
-    req.flash = {};
+    //Read and remove flash data from session
+    const { flash } = req.session;
+    delete req.session.flash;
     
-    for (const name in req.session.flash) {
-        req.flash[name] = req.session.flash[name]; 
+    //Flash data getter
+    req.getFlashData = function(key) {
+        if (flash) {
+            return flash[key] || null;
+        }
+        
+        return null;
     }
 
-    //Remove flash data from session
-    req.session.flash = {};
+    //Flash data setter
+    req.setFlashData = function(key, value) {
+        if (!this.session.flash) {
+            this.session.flash = {};
+        }
+
+        this.session.flash[key] = value;
+    }
 
     next();
 };
