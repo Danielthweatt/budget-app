@@ -32,7 +32,7 @@ module.exports = {
     async postSignUpForm(req, res) {
         debug('postSignUpForm()');
 
-        const body = req.body;
+        const { body } = req;
 
         debug('Validating user...');
         
@@ -40,7 +40,9 @@ module.exports = {
 
         if (error) {
             debug('Validation error...');
-            debug(error.details[0].message);
+
+            error.details.forEach(({ message }) => debug(message));
+
             debug('Redirecting to sign-up form...');
 
             return res.redirect('/sign-up');
