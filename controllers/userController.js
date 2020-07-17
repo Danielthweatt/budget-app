@@ -1,7 +1,7 @@
-const { User } = require('../models');
 const Joi = require('@hapi/joi');
 const bcrypt = require('bcrypt');
 const debug = require('debug')('app:userController');
+const { User } = require('../models');
 
 function validateNewUser(newUser) {
     const newUserSchema = Joi.object({
@@ -19,7 +19,10 @@ module.exports = {
         debug('getHome()');
         debug('Rendering home view...');
 
-        return res.render('home', { title: 'Home' });
+        return res.render('home', { 
+            title: 'Home',
+            user: req.session.user
+        });
     },
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
@@ -88,7 +91,7 @@ module.exports = {
             username
         };
 
-        debug('User signed up succesfully...');
+        debug('User created succesfully...');
         debug('Redirecting to dashboard...');
 
         return res.redirect('/dashboard');

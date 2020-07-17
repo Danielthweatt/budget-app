@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 const config = require('config');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const processSession = require('./middleware/processSession');
 const debug = require('debug')('app:boot');
 const exphbs = require('express-handlebars');
+const processSession = require('./middleware/processSession');
 const router = require('./routes');
 
 //Express App
