@@ -24,17 +24,21 @@ module.exports = {
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
         
+        const { formSubmissionError, signUpFormInputs } = res.locals.flash;
+
         debug('Rendering sign up form view...');
 
         return res.render('sign-up-form', { 
             title: 'Sign Up',
-            formSubmissionError: res.locals.flash.formSubmissionError || null
+            formSubmissionError: formSubmissionError || null,
+            signUpFormInputs: signUpFormInputs || {}
         });
     },
     async postSignUpForm(req, res) {
         debug('postSignUpForm()');
 
         const { body } = req;
+        const { username, email, password } = body;
 
         debug('Validating sign-up form input...');
         
@@ -48,11 +52,14 @@ module.exports = {
             debug('Redirecting to sign-up form...');
             
             req.session.flash.formSubmissionError = error;
+            req.session.flash.signUpFormInputs = {
+                username,
+                email
+            };
 
             return res.redirect('/sign-up');
         }
 
-        const { username, email, password } = body;
         let user = await User.findOne({ username });
 
         if (user) {

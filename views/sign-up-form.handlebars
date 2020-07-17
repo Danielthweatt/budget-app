@@ -7,24 +7,26 @@
                     {{> form-submission-errors}}
                 {{/if}}
                 <form method="POST" action="/sign-up">
+                    {{#with signUpFormInputs}}
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="text" name="username" {{#if username}} value="{{username}}" {{/if}} placeholder="Username" required>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <input class="input" type="email" name="email" {{#if email}} value="{{email}}" {{/if}} placeholder="Email" required>
+                            </div>
+                        </div>
+                    {{/with}}
                     <div class="field">
                         <div class="control">
-                            <input class="input" type="text" name="username" placeholder="Username">
+                            <input class="input" type="password" name="password" placeholder="Password" required>
                         </div>
                     </div>
                     <div class="field">
                         <div class="control">
-                            <input class="input" type="email" name="email" placeholder="Email">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <input class="input" type="password" name="password" placeholder="Password">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <input class="input" type="password" name="confirmPassword" placeholder="Confirm Password">
+                            <input class="input" type="password" name="confirmPassword" placeholder="Confirm Password" required>
                         </div>
                     </div>
                     <div class="field">

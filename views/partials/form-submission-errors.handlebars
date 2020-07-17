@@ -1,9 +1,7 @@
 <div class="notification is-danger is-light">
     <ul class="unordered-list" >
         {{#each formSubmissionError.details}}  
-            {{#with this}}
-                <li>{{message}}</li>
-            {{/with}}
+            <li>{{this.message}}</li>
         {{/each}}
     </ul>
 </div>
