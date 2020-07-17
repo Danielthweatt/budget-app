@@ -28,7 +28,7 @@ module.exports = {
 
         return res.render('sign-up-form', { 
             title: 'Sign Up',
-            formSubmissionError: req.getFlashData('formSubmissionError') || null
+            formSubmissionError: res.locals.flash.formSubmissionError || null
         });
     },
     async postSignUpForm(req, res) {
@@ -36,7 +36,7 @@ module.exports = {
 
         const { body } = req;
 
-        debug('Validating user...');
+        debug('Validating sign-up form input...');
         
         const { error } = await validateNewUser(body);
 
@@ -47,7 +47,7 @@ module.exports = {
 
             debug('Redirecting to sign-up form...');
             
-            req.setFlashData('formSubmissionError', error);
+            req.session.flash.formSubmissionError = error;
 
             return res.redirect('/sign-up');
         }
@@ -59,13 +59,13 @@ module.exports = {
             debug('User already exists...');
             debug('Redirecting to sign-up form...');
 
-            req.setFlashData('formSubmissionError', {
+            req.session.flash.formSubmissionError = {
                 details: [
                     {
                         message: "There is already a user by that username."
                     }
                 ]
-            });
+            };
 
             return res.redirect('/sign-up');
         }
@@ -76,10 +76,15 @@ module.exports = {
         
         await user.save();
 
-        debug('User signed up succesfully...');
-        debug('Redirecting to login form...');
+        req.session.user = {
+            _id: user._id,
+            username
+        };
 
-        return res.redirect('/login');
+        debug('User signed up succesfully...');
+        debug('Redirecting to dashboard...');
+
+        return res.redirect('/dashboard');
     },
     getLoginForm(req, res) {
         debug('getLoginForm()');
@@ -90,18 +95,18 @@ module.exports = {
     },
     getDashboard(req, res) {
         debug('getDashboard()');
-
-        const user = { name: 'John Smith' };
-
         debug('Rendering dashboard view...');
 
         return res.render('dashboard', { 
             title: 'Dashboard',
-            testUser
+            user: req.session.user
         });
     },
     getLogout(req, res) {
         debug('getLogout()');
+        debug('Logging user out...');
+
+        delete req.session.user;
 
         debug('Redirecting to home...');
 
