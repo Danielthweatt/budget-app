@@ -86,15 +86,28 @@ module.exports = {
         
         await user.save();
 
-        req.session.user = {
-            _id: user._id,
-            username
-        };
-
         debug('User created succesfully...');
-        debug('Redirecting to dashboard...');
+        debug('Logging user in and regenerating session...');
 
-        return res.redirect('/dashboard');
+        req.session.regenerate(function(err) {
+            if (err) {
+                debug('Error regenerating session:');
+                debug(err);
+
+                //TODO rework this when error handling is implemented
+                return res.status(500).send();
+            }
+
+            req.session.user = {
+                _id: user._id,
+                username
+            };
+    
+            debug('User logged in and session regenerated...');
+            debug('Redirecting to dashboard...');
+    
+            return res.redirect('/dashboard');
+        });
     },
     getLoginForm(req, res) {
         debug('getLoginForm()');
@@ -114,12 +127,21 @@ module.exports = {
     },
     getLogout(req, res) {
         debug('getLogout()');
-        debug('Logging user out...');
+        debug('Logging user out and destroying session...');
 
-        delete req.session.user;
+        req.session.destroy(function(err) {
+            if (err) {
+                debug('Error destroying session:');
+                debug(err);
 
-        debug('Redirecting to home...');
+                //TODO rework this when error handling is implemented
+                return res.status(500).send();
+            }
 
-        return res.redirect('/');
+            debug('User logged out and session destroyed...');
+            debug('Redirecting to home...');
+
+            return res.redirect('/');
+        });
     },
 };
