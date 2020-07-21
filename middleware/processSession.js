@@ -7,7 +7,7 @@ module.exports = function(req, res, next) {
     res.locals.flash = req.session.flash || {};
     req.session.flash = {};
 
-    debug('Session processed...');
+    debug('Session flash data processed...');
 
     next();
 };

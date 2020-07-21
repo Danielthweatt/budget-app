@@ -7,7 +7,7 @@
                     {{> form-submission-errors}}
                 {{/if}}
                 <form method="POST" action="/sign-up">
-                    {{#with signUpFormInputs}}
+                    {{#with signUpFormInput}}
                         <div class="field">
                             <div class="control">
                                 <input class="input" type="text" name="username" {{#if username}} value="{{username}}" {{/if}} placeholder="Username" required>

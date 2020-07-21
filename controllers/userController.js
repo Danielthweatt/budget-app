@@ -3,15 +3,45 @@ const bcrypt = require('bcrypt');
 const debug = require('debug')('app:userController');
 const { User } = require('../models');
 
-function validateNewUser(newUser) {
-    const newUserSchema = Joi.object({
-        username: Joi.string().min(3).max(50).required(),
-        email: Joi.string().email({ minDomainSegments: 2 }),
-        password: Joi.string().min(5).max(255).required(),
+function validateSignUpFormInput(signUpFormInput) {
+    const signUpFormInputSchema = Joi.object({
+        username: Joi.string()
+                        .min(3)
+                        .max(50)
+                        .required()
+                        .messages({
+                            'string.base': 'Username must be text.',
+                            'string.empty': 'Must have a username.',
+                            'string.min': 'Username must be at least 3 characters long.',
+                            'string.max': 'Username must be at most 50 characters long.',
+                            'any.required': 'Must have a username.'
+                        }),
+        email: Joi.string()
+                    .email({ minDomainSegments: 2 })
+                    .required()
+                    .messages({
+                        'string.base': 'Email address must be text.',
+                        'string.empty': 'Must have an email address.',
+                        'string.email': 'Email address must be a valid email address.',
+                        'any.required': 'Must have an email address.'
+                    }),
+        password: Joi.string()
+                        .min(8)
+                        .max(50)
+                        .required()
+                        .messages({
+                            'string.base': 'Password must be text.',
+                            'string.empty': 'Must have a password.',
+                            'string.min': 'Password must be at least 8 characters long.',
+                            'string.max': 'Password must be at most 50 characters long.',
+                            'any.required': 'Must have a password.'
+                        }),
         confirmPassword: Joi.ref('password')
-    }).with('password', 'confirmPassword');
+    }).with('password', 'confirmPassword').messages({
+        'any.only': 'Confirm Password must be the same as Password.'
+    });
 
-    return newUserSchema.validate(newUser, { abortEarly: false });
+    return signUpFormInputSchema.validate(signUpFormInput, { abortEarly: false });
 }
 
 module.exports = {
@@ -27,14 +57,14 @@ module.exports = {
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
         
-        const { formSubmissionError, signUpFormInputs } = res.locals.flash;
+        const { formSubmissionError, signUpFormInput } = res.locals.flash;
 
         debug('Rendering sign up form view...');
 
         return res.render('sign-up-form', { 
             title: 'Sign Up',
             formSubmissionError: formSubmissionError || null,
-            signUpFormInputs: signUpFormInputs || {}
+            signUpFormInput: signUpFormInput || {}
         });
     },
     async postSignUpForm(req, res) {
@@ -45,7 +75,7 @@ module.exports = {
 
         debug('Validating sign-up form input...');
         
-        const { error } = await validateNewUser(body);
+        const { error } = await validateSignUpFormInput(body);
 
         if (error) {
             debug('Validation errors:');
@@ -55,7 +85,7 @@ module.exports = {
             debug('Redirecting to sign-up form...');
             
             req.session.flash.formSubmissionError = error;
-            req.session.flash.signUpFormInputs = {
+            req.session.flash.signUpFormInput = {
                 username,
                 email
             };
@@ -79,6 +109,9 @@ module.exports = {
 
             return res.redirect('/sign-up');
         }
+
+        debug('Sign-up form input valid...');
+        debug('Creating user...');
 
         user = new User({ username, email, password });
         const salt = await bcrypt.genSalt(10);
