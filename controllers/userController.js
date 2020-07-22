@@ -46,6 +46,27 @@ function validateSignUpFormInput(signUpFormInput) {
     return signUpFormInputSchema.validate(signUpFormInput, { abortEarly: false });
 }
 
+function validateLoginFormInput(loginFormInput) {
+    const loginFormInputSchema = Joi.object({
+        username: Joi.string()
+                        .required()
+                        .messages({
+                            'string.base': 'Username must be text.',
+                            'string.empty': 'Must enter a username.',
+                            'any.required': 'Must enter a username.'
+                        }),
+        password: Joi.string()
+                        .required()
+                        .messages({
+                            'string.base': 'Password must be text.',
+                            'string.empty': 'Must enter a password.',
+                            'any.required': 'Must enter a password.'
+                        })
+    });
+
+    return loginFormInputSchema.validate(loginFormInput, { abortEarly: false });
+}
+
 module.exports = {
     getHome(req, res) {
         debug('getHome()');
@@ -58,6 +79,13 @@ module.exports = {
     },
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
+
+        if (req.session.user) {
+            debug('User is logged in...');
+            debug('Redirecting to dashboard...');
+    
+            return res.redirect('/dashboard');
+        }
         
         const { formSubmissionError, signUpFormInput } = res.locals.flash;
 
@@ -82,7 +110,7 @@ module.exports = {
         if (error) {
             debug('Validation errors:');
 
-            error.details.forEach(({ message }) => debug(message));
+            error.details.forEach(({ message }) => debug(` ${message}`));
 
             debug('Redirecting to sign-up form...');
             
@@ -95,6 +123,8 @@ module.exports = {
             return res.redirect('/sign-up');
         }
 
+        debug('Sign-up form input valid...');
+
         let user = await User.findOne({ username });
 
         if (user) {
@@ -104,7 +134,7 @@ module.exports = {
             req.session.flash.formSubmissionError = {
                 details: [
                     {
-                        message: "There is already a user by that username."
+                        message: "User already exists."
                     }
                 ]
             };
@@ -112,7 +142,7 @@ module.exports = {
             return res.redirect('/sign-up');
         }
 
-        debug('Sign-up form input valid...');
+        debug('User does not already exist...');
         debug('Creating user...');
 
         user = new User({ username, email, password });
@@ -135,7 +165,7 @@ module.exports = {
 
             req.session.user = {
                 _id: user._id,
-                username
+                username: user.username
             };
     
             debug('User logged in and session regenerated...');
@@ -147,9 +177,108 @@ module.exports = {
     getLoginForm(req, res) {
         debug('getLoginForm()');
 
+        if (req.session.user) {
+            debug('User is logged in...');
+            debug('Redirecting to dashboard...');
+    
+            return res.redirect('/dashboard');
+        }
+
+        const { formSubmissionError, loginFormInput } = res.locals.flash;
+
         debug('Rendering login form view...');
 
-        return res.render('login-form', { title: 'Login' });
+        return res.render('login-form', { 
+            title: 'Login',
+            formSubmissionError: formSubmissionError || null,
+            loginFormInput: loginFormInput || {}
+        });
+    },
+    async postLoginForm(req, res) {
+        debug('postLoginForm()');
+
+        const { body } = req;
+        const { username } = body;
+
+        debug('Validating login form input...');
+        
+        const { error } = await validateLoginFormInput(body);
+
+        if (error) {
+            debug('Validation errors:');
+
+            error.details.forEach(({ message }) => debug(` ${message}`));
+
+            debug('Redirecting to login form...');
+            
+            req.session.flash.formSubmissionError = error;
+            req.session.flash.loginFormInput = { username };
+
+            return res.redirect('/login');
+        }
+
+        debug('Login form input valid...');
+        debug('Checking if user exists...');
+
+        let user = await User.findOne({ username });
+
+        if (!user) {
+            debug('User does not exist...');
+            debug('Redirecting to login form...');
+
+            req.session.flash.formSubmissionError = {
+                details: [
+                    {
+                        message: "Login credentials invalid."
+                    }
+                ]
+            };
+
+            return res.redirect('/login');
+        }
+
+        debug('User exists...');
+        debug('Authenticating password...');
+
+        const passwordAuthenticated = await bcrypt.compare(body.password, user.password);
+
+        if (!passwordAuthenticated) {
+            debug('Password not authenticated...');
+            debug('Redirecting to login form...');
+
+            req.session.flash.formSubmissionError = {
+                details: [
+                    {
+                        message: "Login credentials invalid."
+                    }
+                ]
+            };
+
+            return res.redirect('/login');
+        }
+
+        debug('Password authenticated...');
+        debug('Logging user in and regenerating session...');
+
+        req.session.regenerate(function(err) {
+            if (err) {
+                debug('Error regenerating session:');
+                debug(err);
+
+                //TODO rework this when error handling is implemented
+                return res.status(500).send();
+            }
+
+            req.session.user = {
+                _id: user._id,
+                username: user.username
+            };
+    
+            debug('User logged in and session regenerated...');
+            debug('Redirecting to dashboard...');
+    
+            return res.redirect('/dashboard');
+        });
     },
     getDashboard(req, res) {
         debug('getDashboard()');
