@@ -1,0 +1,83 @@
+<section class="section">
+    <div class="container">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter">
+                <h1 class="title is-1">Sign Up</h1>
+                {{#if formSubmissionError}}
+                    {{> form-submission-errors}}
+                {{/if}}
+                <form method="POST" action="/sign-up">
+                    {{#with signUpFormInput}}
+                        <div class="field">
+                            <div class="control">
+                                <input 
+                                    class="input" 
+                                    type="text" 
+                                    name="username" 
+                                    {{#if username}} 
+                                        value="{{username}}" 
+                                    {{/if}} 
+                                    placeholder="Username" 
+                                    title="3 to 50 characters."
+                                    minlength="3"
+                                    maxlength="50"
+                                    required
+                                >
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <input 
+                                    class="input" 
+                                    type="email" 
+                                    name="email" 
+                                    {{#if email}} 
+                                        value="{{email}}" 
+                                    {{/if}} 
+                                    placeholder="Email" 
+                                    title="A valid email address."
+                                    required
+                                >
+                            </div>
+                        </div>
+                    {{/with}}
+                    <div class="field">
+                        <div class="control">
+                            <input 
+                                class="input" 
+                                type="password" 
+                                name="password" 
+                                placeholder="Password" 
+                                title="8 to 50 characters including a lowercase letter, an uppercase letter, and a number."
+                                minlength="8"
+                                maxlength="50"
+                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$"
+                                required
+                            >
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input 
+                                class="input" 
+                                type="password" 
+                                name="confirmPassword" 
+                                placeholder="Confirm Password" 
+                                title="8 to 50 characters including a lowercase letter, an uppercase letter, and a number."
+                                minlength="8"
+                                maxlength="50"
+                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$"
+                                required
+                            >
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input class="button is-dark" type="submit" value="Sign Up">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
