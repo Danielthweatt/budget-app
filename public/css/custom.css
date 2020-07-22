@@ -1,3 +1,17 @@
-.unordered-list {
+/* Custom Type Rules */
+
+/* --- To keep the footer at the bottom of the page --- */
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+/* ------ */
+
+ul li {
     list-style: disc inside;
 }

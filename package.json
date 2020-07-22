@@ -29,6 +29,6 @@
     "morgan": "^1.10.0"
   },
   "nodemonConfig": {
-    "ext": "js, json, handlebars"
+    "ext": "js, css, json, handlebars"
   }
 }
