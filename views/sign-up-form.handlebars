@@ -18,6 +18,7 @@
                                         value="{{username}}" 
                                     {{/if}} 
                                     placeholder="Username" 
+                                    title="3 to 50 characters."
                                     minlength="3"
                                     maxlength="50"
                                     required
@@ -34,6 +35,7 @@
                                         value="{{email}}" 
                                     {{/if}} 
                                     placeholder="Email" 
+                                    title="A valid email address."
                                     required
                                 >
                             </div>
@@ -46,8 +48,10 @@
                                 type="password" 
                                 name="password" 
                                 placeholder="Password" 
+                                title="8 to 50 characters including a lowercase letter, an uppercase letter, and a number."
                                 minlength="8"
                                 maxlength="50"
+                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$"
                                 required
                             >
                         </div>
@@ -59,8 +63,10 @@
                                 type="password" 
                                 name="confirmPassword" 
                                 placeholder="Confirm Password" 
+                                title="8 to 50 characters including a lowercase letter, an uppercase letter, and a number."
                                 minlength="8"
                                 maxlength="50"
+                                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$"
                                 required
                             >
                         </div>

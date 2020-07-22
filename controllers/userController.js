@@ -28,12 +28,14 @@ function validateSignUpFormInput(signUpFormInput) {
         password: Joi.string()
                         .min(8)
                         .max(50)
+                        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/)
                         .required()
                         .messages({
                             'string.base': 'Password must be text.',
                             'string.empty': 'Must have a password.',
                             'string.min': 'Password must be at least 8 characters long.',
                             'string.max': 'Password must be at most 50 characters long.',
+                            'string.pattern.base': 'Password must include a lowercase letter, an uppercase letter, and a number.',
                             'any.required': 'Must have a password.'
                         }),
         confirmPassword: Joi.ref('password')
