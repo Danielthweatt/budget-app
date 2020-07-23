@@ -79,13 +79,6 @@ module.exports = {
     },
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
-
-        if (req.session.user) {
-            debug('User is logged in...');
-            debug('Redirecting to dashboard...');
-    
-            return res.redirect('/dashboard');
-        }
         
         const { formSubmissionError, signUpFormInput } = res.locals.flash;
 
@@ -176,13 +169,6 @@ module.exports = {
     },
     getLoginForm(req, res) {
         debug('getLoginForm()');
-
-        if (req.session.user) {
-            debug('User is logged in...');
-            debug('Redirecting to dashboard...');
-    
-            return res.redirect('/dashboard');
-        }
 
         const { formSubmissionError, loginFormInput } = res.locals.flash;
 

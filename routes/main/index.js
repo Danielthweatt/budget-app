@@ -1,13 +1,15 @@
 const router = require('express').Router();
-const auth = require('../../middleware/auth');
+const authGuest = require('../../middleware/authGuest');
+const authUser = require('../../middleware/authUser');
 const userController = require('../../controllers/userController');
 
 router.get('/', userController.getHome);
-router.get('/sign-up', userController.getSignUpForm);
-router.post('/sign-up', userController.postSignUpForm);
-router.get('/login', userController.getLoginForm);
-router.post('/login', userController.postLoginForm);
-router.get('/dashboard', auth, userController.getDashboard);
-router.get('/logout', auth, userController.getLogout);
+router.get('/sign-up', authGuest, userController.getSignUpForm);
+router.get('/login', authGuest, userController.getLoginForm);
+router.get('/dashboard', authUser, userController.getDashboard);
+router.get('/logout', authUser, userController.getLogout);
+
+router.post('/sign-up', authGuest, userController.postSignUpForm);
+router.post('/login', authGuest, userController.postLoginForm);
 
 module.exports = router;

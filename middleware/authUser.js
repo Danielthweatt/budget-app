@@ -1,4 +1,4 @@
-const debug = require('debug')('app:authMiddleware');
+const debug = require('debug')('app:authUserMiddleware');
 
 module.exports = function(req, res, next) {
     debug('Checking if user is logged in...');
