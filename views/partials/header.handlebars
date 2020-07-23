@@ -19,20 +19,24 @@
             </div>
             <div class="navbar-end">
                 <div class="navbar-item">
+                {{#if user}}
+                    <form method="POST" action="/logout">
+                        <div class="buttons">
+                            <button type="submit" class="button is-light">
+                                <strong>Logout</strong>
+                            </button>
+                        </div>
+                    </form>
+                {{else}}
                     <div class="buttons">
-                    {{#if user}}
-                        <a class="button is-light" href="/logout">
-                            <strong>Logout</strong>
-                        </a>
-                    {{else}}
                         <a class="button is-dark" href="/sign-up">
                             <strong>Sign Up</strong>
                         </a>
                         <a class="button is-light" href="/login">
                             <strong>Login</strong>
                         </a>
-                    {{/if}}
                     </div>
+                {{/if}}
                 </div>
             </div>
         </div>

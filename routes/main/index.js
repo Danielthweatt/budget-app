@@ -7,9 +7,9 @@ router.get('/', userController.getHome);
 router.get('/sign-up', authGuest, userController.getSignUpForm);
 router.get('/login', authGuest, userController.getLoginForm);
 router.get('/dashboard', authUser, userController.getDashboard);
-router.get('/logout', authUser, userController.getLogout);
 
 router.post('/sign-up', authGuest, userController.postSignUpForm);
 router.post('/login', authGuest, userController.postLoginForm);
+router.post('/logout', authUser, userController.postLogout);
 
 module.exports = router;

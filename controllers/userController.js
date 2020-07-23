@@ -275,8 +275,8 @@ module.exports = {
             user: req.session.user
         });
     },
-    getLogout(req, res) {
-        debug('getLogout()');
+    postLogout(req, res) {
+        debug('postLogout()');
         debug('Logging user out and destroying session...');
 
         req.session.destroy(function(err) {
