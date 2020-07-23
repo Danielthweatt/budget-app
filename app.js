@@ -6,8 +6,10 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const debug = require('debug')('app:boot');
 const exphbs = require('express-handlebars');
-const processSession = require('./middleware/processSession');
+const sessionMiddleware = require('./middleware/session');
 const router = require('./routes');
+const routeNotFound = require('./middleware/routeNotFound');
+const error = require('./middleware/error');
 
 //Express App
 const PORT = process.env.PORT || config.get('expressConfig.port');
@@ -44,7 +46,7 @@ app.use(session({
     saveUninitialized: false
     //TODO: Set session store
 }));
-app.use(processSession);
+app.use(sessionMiddleware);
 
 if (app.get('env') !== 'production') {
     app.use(morgan('tiny'));
@@ -62,8 +64,14 @@ debug('Template engine configured...');
 
 //Routes
 app.use(router);
+app.use(routeNotFound);
 
 debug('Routes registered...');
+
+//Express error handling
+app.use(error);
+
+debug('Express error handling registered...');
 
 //Start
 app.listen(PORT, () => {

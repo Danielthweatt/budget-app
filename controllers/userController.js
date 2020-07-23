@@ -90,7 +90,7 @@ module.exports = {
             signUpFormInput: signUpFormInput || {}
         });
     },
-    async postSignUpForm(req, res) {
+    async postSignUpForm(req, res, next) {
         debug('postSignUpForm()');
 
         const { body } = req;
@@ -149,11 +149,7 @@ module.exports = {
 
         req.session.regenerate(function(err) {
             if (err) {
-                debug('Error regenerating session:');
-                debug(err);
-
-                //TODO rework this when error handling is implemented
-                return res.status(500).send();
+                return next(err);
             }
 
             req.session.user = {
@@ -180,7 +176,7 @@ module.exports = {
             loginFormInput: loginFormInput || {}
         });
     },
-    async postLoginForm(req, res) {
+    async postLoginForm(req, res, next) {
         debug('postLoginForm()');
 
         const { body } = req;
@@ -248,11 +244,7 @@ module.exports = {
 
         req.session.regenerate(function(err) {
             if (err) {
-                debug('Error regenerating session:');
-                debug(err);
-
-                //TODO rework this when error handling is implemented
-                return res.status(500).send();
+                return next(err);
             }
 
             req.session.user = {
@@ -275,17 +267,13 @@ module.exports = {
             user: req.session.user
         });
     },
-    postLogout(req, res) {
+    postLogout(req, res, next) {
         debug('postLogout()');
         debug('Logging user out and destroying session...');
 
         req.session.destroy(function(err) {
             if (err) {
-                debug('Error destroying session:');
-                debug(err);
-
-                //TODO rework this when error handling is implemented
-                return res.status(500).send();
+                return next(err);
             }
 
             debug('User logged out and session destroyed...');
