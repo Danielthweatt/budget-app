@@ -1,6 +1,6 @@
-const debug = require('debug')('app:processSessionMiddleware');
+const debug = require('debug')('app:sessionMiddleware');
 
-module.exports = function(req, res, next) {
+module.exports = (req, res, next) => {
     debug('Processing session flash data...');
     
     //Read and remove flash data from session

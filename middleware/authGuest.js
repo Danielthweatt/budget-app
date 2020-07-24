@@ -1,6 +1,6 @@
 const debug = require('debug')('app:authGuestMiddleware');
 
-module.exports = function(req, res, next) {
+module.exports = (req, res, next) => {
     debug('Checking if user is guest...');
 
     if (req.session.user) {
