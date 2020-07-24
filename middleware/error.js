@@ -1,10 +1,11 @@
+const winston = require('winston');
 const debug = require('debug')('app:errorMiddleware');
 
 module.exports = (err, req, res, next) => {
     debug(err);
     debug('Logging error...');
 
-    //TODO: Implement error logging
+    winston.error(err.message, err);
 
     debug('Sending 500 response...');
 
