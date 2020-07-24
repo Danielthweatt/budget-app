@@ -5,7 +5,7 @@ module.exports = (err, req, res, next) => {
     debug(err);
     debug('Logging error...');
 
-    winston.error(err.message, err);
+    winston.error(`500 - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`, { stack: err.stack });
 
     debug('Sending 500 response...');
 

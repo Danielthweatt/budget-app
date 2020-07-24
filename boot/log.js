@@ -14,7 +14,7 @@ module.exports = () => {
         debugAppError(err);
         debugAppError('Logging error...');
     
-        winston.error(err.message, err);
+        winston.error(err.message, { stack: err.stack });
     
         process.exit(1);
     });
