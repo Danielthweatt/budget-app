@@ -72,7 +72,7 @@ module.exports = {
         debug('getHome()');
         debug('Rendering home view...');
 
-        return res.render('home', { 
+        res.render('home', { 
             title: 'Home',
             user: req.session.user
         });
@@ -84,13 +84,13 @@ module.exports = {
 
         debug('Rendering sign up form view...');
 
-        return res.render('sign-up-form', { 
+        res.render('sign-up-form', { 
             title: 'Sign Up',
             formSubmissionError: formSubmissionError || null,
             signUpFormInput: signUpFormInput || {}
         });
     },
-    async postSignUpForm(req, res) {
+    async postSignUpForm(req, res, next) {
         debug('postSignUpForm()');
 
         const { body } = req;
@@ -147,13 +147,9 @@ module.exports = {
         debug('User created succesfully...');
         debug('Logging user in and regenerating session...');
 
-        req.session.regenerate(function(err) {
+        req.session.regenerate(err => {
             if (err) {
-                debug('Error regenerating session:');
-                debug(err);
-
-                //TODO rework this when error handling is implemented
-                return res.status(500).send();
+                return next(err);
             }
 
             req.session.user = {
@@ -164,7 +160,7 @@ module.exports = {
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
     
-            return res.redirect('/dashboard');
+            res.redirect('/dashboard');
         });
     },
     getLoginForm(req, res) {
@@ -174,13 +170,13 @@ module.exports = {
 
         debug('Rendering login form view...');
 
-        return res.render('login-form', { 
+        res.render('login-form', { 
             title: 'Login',
             formSubmissionError: formSubmissionError || null,
             loginFormInput: loginFormInput || {}
         });
     },
-    async postLoginForm(req, res) {
+    async postLoginForm(req, res, next) {
         debug('postLoginForm()');
 
         const { body } = req;
@@ -246,13 +242,9 @@ module.exports = {
         debug('Password authenticated...');
         debug('Logging user in and regenerating session...');
 
-        req.session.regenerate(function(err) {
+        req.session.regenerate(err => {
             if (err) {
-                debug('Error regenerating session:');
-                debug(err);
-
-                //TODO rework this when error handling is implemented
-                return res.status(500).send();
+                return next(err);
             }
 
             req.session.user = {
@@ -263,35 +255,31 @@ module.exports = {
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
     
-            return res.redirect('/dashboard');
+            res.redirect('/dashboard');
         });
     },
     getDashboard(req, res) {
         debug('getDashboard()');
         debug('Rendering dashboard view...');
 
-        return res.render('dashboard', { 
+        res.render('dashboard', { 
             title: 'Dashboard',
             user: req.session.user
         });
     },
-    postLogout(req, res) {
+    postLogout(req, res, next) {
         debug('postLogout()');
         debug('Logging user out and destroying session...');
 
-        req.session.destroy(function(err) {
+        req.session.destroy(err => {
             if (err) {
-                debug('Error destroying session:');
-                debug(err);
-
-                //TODO rework this when error handling is implemented
-                return res.status(500).send();
+                return next(err);
             }
 
             debug('User logged out and session destroyed...');
             debug('Redirecting to home...');
 
-            return res.redirect('/');
+            res.redirect('/');
         });
     }
 };
