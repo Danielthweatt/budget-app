@@ -9,5 +9,5 @@ module.exports = (err, req, res, next) => {
 
     debug('Sending 500 response...');
 
-    res.status(500).send('Something failed.');
+    res.status(500).render('500');
 };
