@@ -11,6 +11,24 @@ const router = require('./routes');
 const routeNotFound = require('./middleware/routeNotFound');
 const error = require('./middleware/error');
 
+process.on('uncaughtException', err => {
+    debug(err);
+    debug('Logging error...');
+
+    //TODO: Implement error logging
+
+    process.exit(1);
+});
+
+process.on('unhandledRejection', err => {
+    debug(err);
+    debug('Logging error...');
+
+    //TODO: Implement error logging
+
+    process.exit(1);
+});
+
 //Express App
 const PORT = process.env.PORT || config.get('expressConfig.port');
 const app = express();

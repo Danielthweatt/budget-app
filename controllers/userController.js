@@ -72,7 +72,7 @@ module.exports = {
         debug('getHome()');
         debug('Rendering home view...');
 
-        return res.render('home', { 
+        res.render('home', { 
             title: 'Home',
             user: req.session.user
         });
@@ -84,7 +84,7 @@ module.exports = {
 
         debug('Rendering sign up form view...');
 
-        return res.render('sign-up-form', { 
+        res.render('sign-up-form', { 
             title: 'Sign Up',
             formSubmissionError: formSubmissionError || null,
             signUpFormInput: signUpFormInput || {}
@@ -147,7 +147,7 @@ module.exports = {
         debug('User created succesfully...');
         debug('Logging user in and regenerating session...');
 
-        req.session.regenerate(function(err) {
+        req.session.regenerate(err => {
             if (err) {
                 return next(err);
             }
@@ -160,7 +160,7 @@ module.exports = {
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
     
-            return res.redirect('/dashboard');
+            res.redirect('/dashboard');
         });
     },
     getLoginForm(req, res) {
@@ -170,7 +170,7 @@ module.exports = {
 
         debug('Rendering login form view...');
 
-        return res.render('login-form', { 
+        res.render('login-form', { 
             title: 'Login',
             formSubmissionError: formSubmissionError || null,
             loginFormInput: loginFormInput || {}
@@ -242,7 +242,7 @@ module.exports = {
         debug('Password authenticated...');
         debug('Logging user in and regenerating session...');
 
-        req.session.regenerate(function(err) {
+        req.session.regenerate(err => {
             if (err) {
                 return next(err);
             }
@@ -255,14 +255,14 @@ module.exports = {
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
     
-            return res.redirect('/dashboard');
+            res.redirect('/dashboard');
         });
     },
     getDashboard(req, res) {
         debug('getDashboard()');
         debug('Rendering dashboard view...');
 
-        return res.render('dashboard', { 
+        res.render('dashboard', { 
             title: 'Dashboard',
             user: req.session.user
         });
@@ -271,7 +271,7 @@ module.exports = {
         debug('postLogout()');
         debug('Logging user out and destroying session...');
 
-        req.session.destroy(function(err) {
+        req.session.destroy(err => {
             if (err) {
                 return next(err);
             }
@@ -279,7 +279,7 @@ module.exports = {
             debug('User logged out and session destroyed...');
             debug('Redirecting to home...');
 
-            return res.redirect('/');
+            res.redirect('/');
         });
     }
 };

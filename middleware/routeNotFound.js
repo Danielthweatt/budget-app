@@ -1,7 +1,8 @@
 const debug = require('debug')('app:routeNotFoundMiddleware');
 
-module.exports = function(req, res, next) {
+module.exports = (req, res, next) => {
     debug('Route not found...');
+    debug('Sending 404 response...');
 
-    return res.status(404).send('Not found.');
+    res.status(404).send('Not found.');
 };

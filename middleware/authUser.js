@@ -1,6 +1,6 @@
 const debug = require('debug')('app:authUserMiddleware');
 
-module.exports = function(req, res, next) {
+module.exports = (req, res, next) => {
     debug('Checking if user is logged in...');
 
     if (!req.session.user) {

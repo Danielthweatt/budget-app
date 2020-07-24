@@ -1,10 +1,12 @@
 const debug = require('debug')('app:errorMiddleware');
 
-module.exports = function(err, req, res, next) {
+module.exports = (err, req, res, next) => {
     debug(err);
     debug('Logging error...');
 
     //TODO: Implement error logging
 
-    return res.status(500).send('Something failed.');
+    debug('Sending 500 response...');
+
+    res.status(500).send('Something failed.');
 };
