@@ -1,12 +1,11 @@
 {
-    "expressConfig": {
+    "server": {
         "port": 3000
     },
-    "dbConfig": {
-        "host": "localhost",
-        "dbName": "budget_app"
+    "db": {
+        "uri": "mongodb://localhost/budget_app"
     },
-    "sessionConfig": {
+    "session": {
         "secret": "aSecretString"
     }
 }

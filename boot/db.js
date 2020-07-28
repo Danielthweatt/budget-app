@@ -4,8 +4,5 @@ const debug = require('debug')('app:boot');
 
 module.exports = () => {
     //MongoDB Connection
-    mongoose.connect(
-        process.env.MONGODB_URI || 
-        `mongodb://${config.get('dbConfig.host')}/${config.get('dbConfig.dbName')}`
-    ).then(() => debug('Connected to MongoDB...'));
+    mongoose.connect(config.get('db.uri')).then(() => debug('Connected to MongoDB...'));
 };
