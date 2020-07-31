@@ -1,0 +1,11 @@
+{
+    "server": {
+        "port": "PORT"
+    },
+    "db": {
+        "uri": "MONGODB_URI"
+    },
+    "session": {
+        "secret": "SESSION_SECRET"
+    }
+}
