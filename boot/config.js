@@ -32,7 +32,7 @@ module.exports = app => {
     }));
     app.use(sessionMiddleware);
     
-    if (app.get('env') !== 'production') {
+    if (app.get('env') === 'development') {
         app.use(morgan('tiny'));
     
         debug('Morgan enabled...');

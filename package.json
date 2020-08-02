@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "start:dev": "nodemon",
-    "test": "jest"
+    "test": "jest --watchAll --verbose"
   },
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "ext": "js, css, json, handlebars"
   },
   "devDependencies": {
-    "jest": "^26.1.0"
+    "jest": "^26.1.0",
+    "supertest": "^4.0.2"
   }
 }

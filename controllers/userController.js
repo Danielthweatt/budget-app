@@ -79,7 +79,7 @@ module.exports = {
     },
     getSignUpForm(req, res) {
         debug('getSignUpForm()');
-        
+
         const { formSubmissionError, signUpFormInput } = res.locals.flash;
 
         debug('Rendering sign up form view...');
