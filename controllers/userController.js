@@ -1,5 +1,4 @@
 const Joi = require('@hapi/joi');
-const bcrypt = require('bcrypt');
 const debug = require('debug')('app:userController');
 const { User } = require('../models');
 
@@ -139,8 +138,6 @@ module.exports = {
         debug('Creating user...');
 
         user = new User({ username, email, password });
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(user.password, salt);
         
         await user.save();
 
@@ -180,7 +177,7 @@ module.exports = {
         debug('postLoginForm()');
 
         const { body } = req;
-        const { username } = body;
+        const { username, password } = body;
 
         debug('Validating login form input...');
         
@@ -222,9 +219,9 @@ module.exports = {
         debug('User exists...');
         debug('Authenticating password...');
 
-        const passwordAuthenticated = await bcrypt.compare(body.password, user.password);
+        const isPasswordAuthenticated = await user.checkPassword(password);
 
-        if (!passwordAuthenticated) {
+        if (!isPasswordAuthenticated) {
             debug('Password not authenticated...');
             debug('Redirecting to login form...');
 
