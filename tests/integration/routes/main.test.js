@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { User } = require('../../models');
+const { User } = require('../../../models');
 
 let server;
 const testAccount = {
@@ -8,22 +8,16 @@ const testAccount = {
     password: 'Testing1!'
 };
 
-const createUser = async (username, email, password) => {
-    const user = { username, email, password };
+const createUser = async (username, email, password) => await (new User({ username, email, password })).save();
 
-    await (new User(user)).save();
-
-    return user;
-};
-
-describe('routes', () => {
+describe('Main Routes', () => {
     beforeEach(() => {
-        server = require('../../app');
+        server = require('../../../app');
     });
 
     afterEach(async () => {
-        await server.close();
         await User.remove({});
+        await server.close();
     });
 
     describe('GET /', () => {
