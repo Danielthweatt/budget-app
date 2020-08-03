@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "start:dev": "nodemon",
-    "test": "jest --watchAll --verbose"
+    "test": "jest --watchAll --verbose",
+    "test:unit": "jest tests/unit --watchAll --verbose",
+    "test:integration": "jest tests/integration --watchAll --verbose"
   },
   "repository": {
     "type": "git",
