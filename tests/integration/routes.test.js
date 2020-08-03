@@ -412,4 +412,33 @@ describe('routes', () => {
             expect(res.redirect).toBeTruthy();
         });
     });
+
+    describe('POST /logout', () => {
+        it('should log the user out and return a redirect if the user is logged in', async () => {
+            const { username, email, password } = testAccount;
+
+            await createUser(username, email, password);
+
+            const agent = request.agent(server);
+
+            await agent.post('/login').send({ username, password });
+
+            let res = await agent.post('/logout');
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+
+            res = await agent.get('/dashboard');
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should return a redirect if the user is not logged in', async () => {
+            const res = await request(server).post('/logout');
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+    });
 });
