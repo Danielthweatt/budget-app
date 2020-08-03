@@ -60,7 +60,7 @@ describe('routes', () => {
     });
 
     describe('POST /sign-up', () => {
-        it('should not create a user and return a redirect if a user is already logged in', async () => {
+        it('should not create a user and return a redirect if the user is logged in', async () => {
             let { username, email, password } = testAccount;
             
             await createUser(username, email, password);
@@ -256,7 +256,7 @@ describe('routes', () => {
             expect(res.redirect).toBeTruthy();
         });
 
-        it('should create a user and return a redirect if no user is logged in, the input is valid, and a user by that username does not exist', async () => {
+        it('should create a user and return a redirect if the user is not logged in, the input is valid, and a user by that username does not exist', async () => {
             const { username, email, password } = testAccount;
 
             const res = await request(server).post('/sign-up').send({
@@ -269,6 +269,145 @@ describe('routes', () => {
             const user = await User.findOne({ username });
 
             expect(user).not.toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+    });
+
+    describe('GET /login', () => {
+        it('should return the login form if the user is not logged in', async () => {
+            const res = await request(server).get('/login');
+
+            expect(res.status).toBe(200);
+            expect(res.headers['content-type']).toMatch(/text\/html/);
+        });
+
+        it('should return a redirect if the user is logged in', async () => {
+            const { username, email, password } = testAccount;
+
+            await createUser(username, email, password);
+
+            const agent = request.agent(server);
+
+            await agent.post('/login').send({ username, password });
+
+            const res = await agent.get('/login');
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+    });
+
+    describe('POST /login', () => {
+        it('should return a redirect if the user is logged in', async () => {
+            const { username, email, password } = testAccount;
+
+            await createUser(username, email, password);
+
+            const agent = request.agent(server);
+
+            await agent.post('/login').send({ username, password });           
+
+            const res = await agent.post('/login').send({ username, password });
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not log in the user and return a redirect if there is no username', async () => {
+            let { username, email, password } = testAccount;
+            
+            await createUser(username, email, password);
+
+            username = '';
+
+            const agent = request.agent(server);
+
+            let res = await agent.post('/login').send({ username, password }); 
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+
+            res = await agent.get('/dashboard');
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not log in the user and return a redirect if there is no password', async () => {
+            let { username, email, password } = testAccount;
+            
+            await createUser(username, email, password);
+
+            password = '';
+
+            const agent = request.agent(server);
+
+            let res = await agent.post('/login').send({ username, password }); 
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+
+            res = await agent.get('/dashboard');
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not log in the user and return a redirect if a user by that username does not exist', async () => {
+            const { username, password } = testAccount;
+
+            const agent = request.agent(server);
+
+            let res = await agent.post('/login').send({ username, password }); 
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+
+            res = await agent.get('/dashboard');
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should log in a user and return a redirect if no user is logged in, the input is valid, and a user by that username does exist', async () => {
+            const { username, email, password } = testAccount;
+
+            await createUser(username, email, password);
+
+            const agent = request.agent(server);
+
+            let res = await agent.post('/login').send({ username, password });
+
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+
+            res = await agent.get('/dashboard');
+
+            expect(res.status).toBe(200);
+            expect(res.headers['content-type']).toMatch(/text\/html/);
+        });
+    });
+
+    describe('GET /dashboard', () => {
+        it('should return the dashboard if the user is logged in', async () => {
+            const { username, email, password } = testAccount;
+
+            await createUser(username, email, password);
+
+            const agent = request.agent(server);
+
+            await agent.post('/login').send({ username, password });
+            
+            const res = await agent.get('/dashboard');
+
+            expect(res.status).toBe(200);
+            expect(res.headers['content-type']).toMatch(/text\/html/);
+        });
+
+        it('should return a redirect if the user is not logged in', async () => {
+            const res = await request(server).get('/dashboard');
+
             expect(res.status).toBe(302);
             expect(res.redirect).toBeTruthy();
         });
