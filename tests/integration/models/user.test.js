@@ -1,13 +1,6 @@
 const bcrypt = require('bcrypt');
+const { testAccount } = require('../../utils');
 const { User } = require('../../../models');
-
-const testAccount = {
-    username: 'Test Account', 
-    email: 'test@example.com', 
-    password: 'Testing1!'
-};
-
-const createUser = async (username, email, password) => await (new User({ username, email, password })).save();
 
 describe('User Model', () => {
     beforeEach(() => {
@@ -19,9 +12,9 @@ describe('User Model', () => {
     });
 
     describe('Save a new User', () => {
-        it('should hash a new user\'s password when saving the new user to the db ', async () => {
+        it('should hash a new user\'s plain text password when saving the new user to the db ', async () => {
             const { username, email, password } = testAccount;
-            let user = await createUser(username, email, password);
+            let user = await (new User({ username, email, password })).save();
             const hashedPasswordMatchesPassword = await bcrypt.compare(password, user.password);
 
             expect(hashedPasswordMatchesPassword).toBeTruthy();
@@ -37,7 +30,7 @@ describe('User Model', () => {
         it('should return true if the plain text password argument matches the user\'s saved, hashed password ', async () => {
             const { username, email, password } = testAccount;
 
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const user = await User.findOne({ username });
             const result = await user.checkPassword(password);

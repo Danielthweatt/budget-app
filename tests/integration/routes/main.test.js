@@ -1,14 +1,8 @@
 const request = require('supertest');
+const { testAccount, testAccount2 } = require('../../utils');
 const { User } = require('../../../models');
 
 let server;
-const testAccount = {
-    username: 'Test Account', 
-    email: 'test@example.com', 
-    password: 'Testing1!'
-};
-
-const createUser = async (username, email, password) => await (new User({ username, email, password })).save();
 
 describe('Main Routes', () => {
     beforeEach(() => {
@@ -40,7 +34,7 @@ describe('Main Routes', () => {
         it('should return a redirect if the user is logged in', async () => {
             const { username, email, password } = testAccount;
 
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const agent = request.agent(server);
 
@@ -55,24 +49,24 @@ describe('Main Routes', () => {
 
     describe('POST /sign-up', () => {
         it('should not create a user and return a redirect if the user is logged in', async () => {
-            let { username, email, password } = testAccount;
+            const { username, email, password } = testAccount;
             
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const agent = request.agent(server);
 
             await agent.post('/login').send({ username, password });
 
-            username = 'Test Account 2';
+            const { username: username2, email: email2, password: password2 } = testAccount2;
 
             const res = await agent.post('/sign-up').send({
-                username,
-                email,
-                password,
-                confirmPassword: password
+                username: username2,
+                email: email2,
+                password: password2,
+                confirmPassword: password2
             });
 
-            const user = await User.findOne({ username });
+            const user = await User.findOne({ username: username2 });
 
             expect(user).toBeNull();
             expect(res.status).toBe(302);
@@ -234,7 +228,7 @@ describe('Main Routes', () => {
         it('should not create a user and return a redirect if a user by that username already exists', async () => {
             const { username, email, password } = testAccount;
             
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const res = await request(server).post('/sign-up').send({
                 username,
@@ -279,7 +273,7 @@ describe('Main Routes', () => {
         it('should return a redirect if the user is logged in', async () => {
             const { username, email, password } = testAccount;
 
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const agent = request.agent(server);
 
@@ -296,7 +290,7 @@ describe('Main Routes', () => {
         it('should return a redirect if the user is logged in', async () => {
             const { username, email, password } = testAccount;
 
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const agent = request.agent(server);
 
@@ -311,7 +305,7 @@ describe('Main Routes', () => {
         it('should not log in the user and return a redirect if there is no username', async () => {
             let { username, email, password } = testAccount;
             
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             username = '';
 
@@ -331,7 +325,7 @@ describe('Main Routes', () => {
         it('should not log in the user and return a redirect if there is no password', async () => {
             let { username, email, password } = testAccount;
             
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             password = '';
 
@@ -367,7 +361,7 @@ describe('Main Routes', () => {
         it('should log in a user and return a redirect if no user is logged in, the input is valid, and a user by that username does exist', async () => {
             const { username, email, password } = testAccount;
 
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const agent = request.agent(server);
 
@@ -387,7 +381,7 @@ describe('Main Routes', () => {
         it('should return the dashboard if the user is logged in', async () => {
             const { username, email, password } = testAccount;
 
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const agent = request.agent(server);
 
@@ -411,7 +405,7 @@ describe('Main Routes', () => {
         it('should log the user out and return a redirect if the user is logged in', async () => {
             const { username, email, password } = testAccount;
 
-            await createUser(username, email, password);
+            await (new User({ username, email, password })).save();
 
             const agent = request.agent(server);
 

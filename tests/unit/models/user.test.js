@@ -1,11 +1,6 @@
 const bcrypt = require('bcrypt');
+const { testAccount } = require('../../utils');
 const { User } = require('../../../models');
-
-const testAccount = {
-    username: 'Test Account', 
-    email: 'test@example.com', 
-    password: 'Testing1!'
-};
 
 describe('User Model', () => {
     describe('User.hashPassword', () => {
