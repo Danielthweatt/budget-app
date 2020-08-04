@@ -8,7 +8,7 @@ describe('User Model', () => {
     });
 
     afterEach(async () => {
-        await User.remove({});
+        await User.deleteMany({});
     });
 
     describe('Save a new User', () => {

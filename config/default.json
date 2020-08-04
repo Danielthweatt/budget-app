@@ -3,7 +3,7 @@
         "port": 3000
     },
     "db": {
-        "uri": "mongodb://localhost/budget_app"
+        "uri": "mongodb://localhost:27017/budget_app"
     },
     "session": {
         "secret": "aSecretString"
