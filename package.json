@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "start:dev": "nodemon",
-    "test": "jest --watchAll --verbose",
+    "test": "jest --watchAll",
     "test:unit": "npm run test -- tests/unit",
     "test:integration": "npm run test -- tests/integration"
   },
@@ -39,5 +39,9 @@
   "devDependencies": {
     "jest": "^26.1.0",
     "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "verbose": true
   }
 }
