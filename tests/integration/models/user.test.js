@@ -1,14 +1,21 @@
+const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { testAccount } = require('../../utils');
 const { User } = require('../../../models');
 
+process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_user_tests';
+
 describe('User Model', () => {
-    beforeEach(() => {
+    beforeAll(() => {
         require('../../../boot/db')();
     });
 
     afterEach(async () => {
         await User.deleteMany({});
+    });
+
+    afterAll(async () => {
+        await mongoose.disconnect();
     });
 
     describe('Save a new User', () => {

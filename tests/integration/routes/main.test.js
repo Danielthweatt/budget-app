@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const request = require('supertest');
 const { testAccount, testAccount2 } = require('../../utils');
 const { User } = require('../../../models');
@@ -12,6 +13,10 @@ describe('Main Routes', () => {
     afterEach(async () => {
         await User.deleteMany({});
         await server.close();
+    });
+
+    afterAll(async () => {
+        await mongoose.disconnect();
     });
 
     describe('GET /', () => {
