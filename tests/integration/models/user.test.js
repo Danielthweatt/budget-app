@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const { testAccount } = require('../../utils');
 const { User } = require('../../../models');
@@ -12,10 +11,6 @@ describe('User Model', () => {
 
     afterEach(async () => {
         await User.deleteMany({});
-    });
-
-    afterAll(async () => {
-        await mongoose.disconnect();
     });
 
     describe('Save a new User', () => {
