@@ -16,7 +16,7 @@ module.exports = app => {
     app.use(express.static('public'));
     //Session Management
     app.use(session({
-        secret: config.get('sessionConfig.secret'),
+        secret: config.get('session.secret'),
         name: "budget-app",
         //TODO: Come back to these cookie attributes and re-evaluate
         cookie: {
@@ -32,7 +32,7 @@ module.exports = app => {
     }));
     app.use(sessionMiddleware);
     
-    if (app.get('env') !== 'production') {
+    if (app.get('env') === 'development') {
         app.use(morgan('tiny'));
     
         debug('Morgan enabled...');

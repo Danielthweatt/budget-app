@@ -2,10 +2,13 @@ const mongoose = require('mongoose');
 const config = require('config');
 const debug = require('debug')('app:boot');
 
-module.exports = () => {
+module.exports = async () => {
     //MongoDB Connection
-    mongoose.connect(
-        process.env.MONGODB_URI || 
-        `mongodb://${config.get('dbConfig.host')}/${config.get('dbConfig.dbName')}`
-    ).then(() => debug('Connected to MongoDB...'));
+    await mongoose.connect(config.get('db.uri'), { 
+        useNewUrlParser: true, 
+        useCreateIndex: true,
+        useUnifiedTopology:true 
+    });
+
+    debug('Connected to MongoDB...');
 };
