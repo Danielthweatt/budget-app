@@ -4,7 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "start:dev": "nodemon",
+    "test": "jest --watchAll",
+    "test:unit": "npm run test -- tests/unit",
+    "test:integration": "npm run test -- tests/integration"
   },
   "repository": {
     "type": "git",
@@ -31,5 +35,14 @@
   },
   "nodemonConfig": {
     "ext": "js, css, json, handlebars"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["./tests/setup.js"],
+    "verbose": true
   }
 }
