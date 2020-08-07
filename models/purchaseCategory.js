@@ -4,10 +4,10 @@ const purchaseCategorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        minlength: 2,
+        minlength: 3,
         maxlength: 50
     },
-    monthlyAmount: {
+    amount: {
         type: Number,
         min: 0.01
     }

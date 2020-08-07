@@ -9,3 +9,8 @@ module.exports.testAccount2 = {
     email: 'test2@example.com', 
     password: 'Testing2!'
 };
+
+module.exports.testBudget = {
+    name: 'Test Budget', 
+    amount: 5000
+};
