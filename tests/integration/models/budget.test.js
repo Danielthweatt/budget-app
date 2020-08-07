@@ -14,7 +14,45 @@ describe('Budget Model', () => {
 
 
     describe('Save a new budget', () => {
-        it('should not save a new budget in the database if the budget\'s monthly amount is not set', async () => {
+        it('should not save a new budget in the database if the budget\'s name is less than 3 characters', async () => {
+            let { name, amount } = testBudget;
+
+            name = new Array(3).join('a');
+            
+            let error;
+
+            try {
+                await (new Budget({ name, amount })).save();
+            } catch(err) {
+                error = err;
+            }
+
+            const budget = await Budget.findOne({ name });
+
+            expect(error).not.toBeUndefined();
+            expect(budget).toBeNull();
+        });
+
+        it('should not save a new budget in the database if the budget\'s name is more than 50 characters', async () => {
+            let { name, amount } = testBudget;
+
+            name = new Array(52).join('a');
+            
+            let error;
+
+            try {
+                await (new Budget({ name, amount })).save();
+            } catch(err) {
+                error = err;
+            }
+
+            const budget = await Budget.findOne({ name });
+
+            expect(error).not.toBeUndefined();
+            expect(budget).toBeNull();
+        });
+
+        it('should not save a new budget in the database if the budget\'s amount is not set', async () => {
             let { name, amount } = testBudget;
 
             amount = undefined;
@@ -33,7 +71,7 @@ describe('Budget Model', () => {
             expect(budget).toBeNull();
         });
 
-        it('should not save a new budget in the database if the budget\'s monthly amount is less than 0.01', async () => {
+        it('should not save a new budget in the database if the budget\'s amount is less than 0.01', async () => {
             let { name, amount } = testBudget;
 
             amount = 0.00;
