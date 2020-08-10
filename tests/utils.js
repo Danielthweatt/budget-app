@@ -10,7 +10,13 @@ module.exports.testAccount2 = {
     password: 'Testing2!'
 };
 
+module.exports.testPurchaseCategory = {
+    name: 'Rent',
+    amount: 800
+};
+
 module.exports.testBudget = {
     name: 'Test Budget', 
-    amount: 5000
+    amount: 5000,
+    purchaseCategories: [ module.exports.testPurchaseCategory ]
 };

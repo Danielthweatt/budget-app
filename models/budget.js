@@ -13,7 +13,12 @@ const budgetSchema = new mongoose.Schema({
         required: true,
         min: 0.01
     },
-    purchaseCategories: [ purchaseCategorySchema ]
+    purchaseCategories: {
+        type: [ purchaseCategorySchema ],
+        validate(val) {
+            return val.length > 0;
+        }
+    }
 });
 
 module.exports = {
