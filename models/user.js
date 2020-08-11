@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
+const { Budget } = require('./budget');
 const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema({
+const { Schema } = mongoose;
+
+const userSchema = Schema({
     username: {
         type: String,
         required: true,
@@ -20,7 +23,11 @@ const userSchema = new mongoose.Schema({
         required: true,
         minlength: 8,
         maxlength: 50
-    }
+    },
+    budgets: [ {
+        type: Schema.Types.ObjectId,
+        ref: Budget
+    } ]
 });
 
 //Static methods
