@@ -1,6 +1,7 @@
 const Joi = require('@hapi/joi');
 const debug = require('debug')('app:userController');
 const { User } = require('../models');
+const { Budget } = require('../models/budget');
 
 function validateSignUpFormInput(signUpFormInput) {
     const signUpFormInputSchema = Joi.object({
@@ -151,7 +152,9 @@ module.exports = {
 
             req.session.user = {
                 _id: user._id,
-                username: user.username
+                username: user.username,
+                email: user.email,
+                budgets: []
             };
     
             debug('User logged in and session regenerated...');
@@ -199,7 +202,7 @@ module.exports = {
         debug('Login form input valid...');
         debug('Checking if user exists...');
 
-        let user = await User.findOne({ username });
+        let user = await User.findOne({ username }).populate('budgets');
 
         if (!user) {
             debug('User does not exist...');
@@ -246,7 +249,11 @@ module.exports = {
 
             req.session.user = {
                 _id: user._id,
-                username: user.username
+                username: user.username,
+                email: user.email,
+                budgets: user.budgets.map(({ _id, name, amount }) => {
+                    return { _id, name, amount };
+                })
             };
     
             debug('User logged in and session regenerated...');

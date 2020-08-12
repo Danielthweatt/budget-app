@@ -10,6 +10,15 @@
             <div class="tile is-parent">
                 <div class="tile is-child box">
                     <h2 class="title is-2">Budgets</h2>
+                    {{#if user.budgets.length}}
+                        <ul>
+                        {{#each user.budgets}}  
+                            <li>{{this.name}} - ${{this.amount}}</li>
+                        {{/each}}
+                        </ul>
+                    {{else}}
+                        <p>You have not created any budgets yet!</p>
+                    {{/if}}
                 </div>
             </div>
         </div>

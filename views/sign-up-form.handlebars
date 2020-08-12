@@ -7,40 +7,40 @@
                     {{> form-submission-errors}}
                 {{/if}}
                 <form method="POST" action="/sign-up">
-                    {{#with signUpFormInput}}
-                        <div class="field">
-                            <div class="control">
-                                <input 
-                                    class="input" 
-                                    type="text" 
-                                    name="username" 
-                                    {{#if username}} 
-                                        value="{{username}}" 
-                                    {{/if}} 
-                                    placeholder="Username" 
-                                    title="3 to 50 characters."
-                                    minlength="3"
-                                    maxlength="50"
-                                    required
-                                >
-                            </div>
+                {{#with signUpFormInput}}
+                    <div class="field">
+                        <div class="control">
+                            <input 
+                                class="input" 
+                                type="text" 
+                                name="username" 
+                                {{#if username}} 
+                                    value="{{username}}" 
+                                {{/if}} 
+                                placeholder="Username" 
+                                title="3 to 50 characters."
+                                minlength="3"
+                                maxlength="50"
+                                required
+                            >
                         </div>
-                        <div class="field">
-                            <div class="control">
-                                <input 
-                                    class="input" 
-                                    type="email" 
-                                    name="email" 
-                                    {{#if email}} 
-                                        value="{{email}}" 
-                                    {{/if}} 
-                                    placeholder="Email" 
-                                    title="A valid email address."
-                                    required
-                                >
-                            </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input 
+                                class="input" 
+                                type="email" 
+                                name="email" 
+                                {{#if email}} 
+                                    value="{{email}}" 
+                                {{/if}} 
+                                placeholder="Email" 
+                                title="A valid email address."
+                                required
+                            >
                         </div>
-                    {{/with}}
+                    </div>
+                {{/with}}
                     <div class="field">
                         <div class="control">
                             <input 
