@@ -1,7 +1,6 @@
 const Joi = require('@hapi/joi');
 const debug = require('debug')('app:userController');
 const { User } = require('../models');
-const { Budget } = require('../models/budget');
 
 function validateSignUpFormInput(signUpFormInput) {
     const signUpFormInputSchema = Joi.object({
@@ -150,12 +149,7 @@ module.exports = {
                 return next(err);
             }
 
-            req.session.user = {
-                _id: user._id,
-                username: user.username,
-                email: user.email,
-                budgets: []
-            };
+            req.session.user = user.getSessionObject();
     
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
@@ -247,14 +241,7 @@ module.exports = {
                 return next(err);
             }
 
-            req.session.user = {
-                _id: user._id,
-                username: user.username,
-                email: user.email,
-                budgets: user.budgets.map(({ _id, name, amount }) => {
-                    return { _id, name, amount };
-                })
-            };
+            req.session.user = user.getSessionObject();
     
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
