@@ -75,4 +75,14 @@ describe('PurchaseCategory Model', () => {
         expect(purchaseCategory.name).toBe(name);
         expect(purchaseCategory.amount).toBe(amount);
     });
+
+    it('should return a plain object when getPublicObject() is called on a saved purchase category', async () => {
+        await (new PurchaseCategory({ name, amount })).save();
+
+        purchaseCategory = await PurchaseCategory.findOne({ name });
+
+        const publicPurchaseCategory = purchaseCategory.getPublicObject();
+
+        expect(publicPurchaseCategory.constructor).toBe(Object);
+    });
 });

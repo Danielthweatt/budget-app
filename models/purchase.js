@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { purchaseCategorySchema } = require('./purchaseCategory');
 
 const purchaseSchema = new mongoose.Schema({
-    category: {
+    purchaseCategory: {
         type: purchaseCategorySchema,
         required: true
     },

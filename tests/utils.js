@@ -1,24 +1,24 @@
-module.exports.testPurchaseCategory = {
+exports.testPurchaseCategory = {
     name: 'Rent',
     amount: 800
 };
 
-module.exports.testBudget = {
+exports.testBudget = {
     name: 'Test Budget', 
     amount: 5000,
-    purchaseCategories: [ module.exports.testPurchaseCategory ]
+    purchaseCategories: [ exports.testPurchaseCategory ]
 };
 
-module.exports.testAccount = {
+exports.testAccount = {
     username: 'Test Account', 
     email: 'test@example.com', 
     password: 'Testing1!',
-    budgets: [ module.exports.testBudget ]
+    budgets: [ exports.testBudget ]
 };
 
-module.exports.testAccount2 = {
+exports.testAccount2 = {
     username: 'Test Account 2', 
     email: 'test2@example.com', 
     password: 'Testing2!',
-    budgets: [ module.exports.testBudget ]
+    budgets: [ exports.testBudget ]
 };

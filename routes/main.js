@@ -7,7 +7,7 @@ const userController = require('../controllers/userController');
 router.get('/', userController.getHome);
 router.get('/sign-up', authGuest, userController.getSignUpForm);
 router.get('/login', authGuest, userController.getLoginForm);
-router.get('/dashboard', authUser, userController.getDashboard);
+router.get('/dashboard', authUser, asyncHandler(userController.getDashboard));
 
 router.post('/sign-up', authGuest, asyncHandler(userController.postSignUpForm));
 router.post('/login', authGuest, asyncHandler(userController.postLoginForm));

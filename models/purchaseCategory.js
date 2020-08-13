@@ -13,6 +13,15 @@ const purchaseCategorySchema = new mongoose.Schema({
     }
 });
 
+//Instance methods
+purchaseCategorySchema.methods.getPublicObject = function() {
+    return {
+        _id: this._id,
+        name: this.name,
+        amount: this.amount
+    };
+};
+
 module.exports = {
     purchaseCategorySchema,
     PurchaseCategory: mongoose.model('PurchaseCategory', purchaseCategorySchema)

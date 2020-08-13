@@ -15,7 +15,7 @@ describe('User Model', () => {
     beforeEach(async () => {
         username = testAccount.username;
         email = testAccount.email;
-        password = testAccount.password
+        password = testAccount.password;
         budget = await (new Budget({ name, amount, purchaseCategories })).save();
         budgets = [ budget._id ];
         error = undefined;
@@ -127,7 +127,7 @@ describe('User Model', () => {
                 error = err;
             }
 
-            users = await User.find({ username });
+            const users = await User.find({ username });
 
             expect(users.length).toBe(1);
             expect(error).not.toBeUndefined();
@@ -166,6 +166,16 @@ describe('User Model', () => {
             expect(user.budgets[0].purchaseCategories.length).toBe(purchaseCategories.length);
             expect(user.budgets[0].purchaseCategories[0].name).toBe(purchaseCategories[0].name);
             expect(user.budgets[0].purchaseCategories[0].amount).toBe(purchaseCategories[0].amount);
+        });
+
+        it('should return a plain object when getPublicObject() is called on a saved user', async () => {
+            await (new User({ username, email, password, budgets })).save();
+
+            user = await User.findOne({ username }).populate('budgets');
+
+            const publicUser = user.getPublicObject();
+
+            expect(publicUser.constructor).toBe(Object);
         });
     });
 });

@@ -43,12 +43,11 @@ userSchema.methods.checkPassword = function(password) {
     return bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.getSessionObject = function() {
+userSchema.methods.getPublicObject = function() {
     return {
-        _id: this._id ? this._id : '',
-        username: this.username ? this.username : '',
-        email: this.email ? this.email : '',
-        budgets: this.budgets ? this.budgets.map(budget => budget.getSessionObject()) : []
+        _id: this._id,
+        username: this.username,
+        email: this.email
     };
 };
 

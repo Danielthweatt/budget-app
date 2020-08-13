@@ -111,5 +111,15 @@ describe('Budget Model', () => {
             expect(budget.purchaseCategories[0].name).toBe(purchaseCategories[0].name);
             expect(budget.purchaseCategories[0].amount).toBe(purchaseCategories[0].amount);
         });
+
+        it('should return a plain object when getPublicObject() is called on a saved budget', async () => {
+            await (new Budget({ name, amount, purchaseCategories })).save();
+
+            budget = await Budget.findOne({ name });
+
+            const publicBudget = budget.getPublicObject();
+
+            expect(publicBudget.constructor).toBe(Object);
+        });
     });
 });

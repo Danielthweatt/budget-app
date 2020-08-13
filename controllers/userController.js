@@ -138,7 +138,7 @@ module.exports = {
         debug('Creating user...');
 
         user = new User({ username, email, password });
-        
+
         await user.save();
 
         debug('User created succesfully...');
@@ -149,7 +149,7 @@ module.exports = {
                 return next(err);
             }
 
-            req.session.user = user.getSessionObject();
+            req.session.user = user.getPublicObject();
     
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
@@ -241,7 +241,7 @@ module.exports = {
                 return next(err);
             }
 
-            req.session.user = user.getSessionObject();
+            req.session.user = user.getPublicObject();
     
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
@@ -249,7 +249,7 @@ module.exports = {
             res.redirect('/dashboard');
         });
     },
-    getDashboard(req, res) {
+    async getDashboard(req, res) {
         debug('getDashboard()');
         debug('Rendering dashboard view...');
 

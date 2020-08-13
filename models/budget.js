@@ -22,11 +22,11 @@ const budgetSchema = new mongoose.Schema({
 });
 
 //Instance methods
-budgetSchema.methods.getSessionObject = function() {
+budgetSchema.methods.getPublicObject = function() {
     return {
-        _id: this._id ? this._id : '',
-        name: this.name ? this.name : '',
-        amount: this.amount ? this.amount : 0.00
+        _id: this._id,
+        name: this.name,
+        amount: this.amount
     };
 };
 
