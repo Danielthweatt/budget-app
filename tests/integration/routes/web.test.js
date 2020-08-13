@@ -4,7 +4,7 @@ const { User } = require('../../../models');
 
 let server, username, email, password, agent, res, user;
 
-describe('Main Routes', () => {
+describe('Web Routes', () => {
     beforeEach(() => {
         server = require('../../../app');
         username = testAccount.username;

@@ -1,8 +1,8 @@
 const router = require('express').Router();
-const authGuest = require('../middleware/authGuest');
-const authUser = require('../middleware/authUser');
-const asyncHandler = require('../middleware/asyncHandler');
-const userController = require('../controllers/userController');
+const authGuest = require('../../middleware/authGuest');
+const authUser = require('../../middleware/authUser');
+const asyncHandler = require('../../middleware/asyncHandler');
+const userController = require('../../controllers/web/userController');
 
 router.get('/', userController.getHome);
 router.get('/sign-up', authGuest, userController.getSignUpForm);

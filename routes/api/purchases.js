@@ -1,4 +1,4 @@
 const router = require('express').Router();
-const purchasesController = require('../../controllers/purchasesController');
+const purchasesController = require('../../controllers/api/purchasesController');
 
 module.exports = router;

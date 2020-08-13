@@ -1,7 +1,7 @@
 const { testBudget } = require('../../utils');
 const { Budget } = require('../../../models');
 
-let name, amount, purchaseCategories, error, budget;
+let name, amount, error, budget;
 
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_budget_tests';
 
@@ -13,7 +13,6 @@ describe('Budget Model', () => {
     beforeEach(() => {
         name = testBudget.name;
         amount = testBudget.amount;
-        purchaseCategories = testBudget.purchaseCategories;
         error = undefined;
         budget = undefined;
     });
@@ -28,7 +27,7 @@ describe('Budget Model', () => {
             name = new Array(3).join('a');
 
             try {
-                await (new Budget({ name, amount, purchaseCategories })).save();
+                await (new Budget({ name, amount })).save();
             } catch(err) {
                 error = err;
             }
@@ -43,7 +42,7 @@ describe('Budget Model', () => {
             name = new Array(52).join('a');
 
             try {
-                await (new Budget({ name, amount, purchaseCategories })).save();
+                await (new Budget({ name, amount })).save();
             } catch(err) {
                 error = err;
             }
@@ -58,7 +57,7 @@ describe('Budget Model', () => {
             amount = undefined;
 
             try {
-                await (new Budget({ name, amount, purchaseCategories })).save();
+                await (new Budget({ name, amount })).save();
             } catch(err) {
                 error = err;
             }
@@ -73,7 +72,7 @@ describe('Budget Model', () => {
             amount = 0.00;
 
             try {
-                await (new Budget({ name, amount, purchaseCategories })).save();
+                await (new Budget({ name, amount })).save();
             } catch(err) {
                 error = err;
             }
@@ -84,22 +83,19 @@ describe('Budget Model', () => {
             expect(budget).toBeNull();
         });
 
-        it('should not save a new budget in the database if the budget has no purchase categories', async () => {
-            purchaseCategories = [];
-
-            try {
-                await (new Budget({ name, amount, purchaseCategories })).save();
-            } catch(err) {
-                error = err;
-            }
+        it('should save a new budget in the database if the budget has a valid name and amount', async () => {
+            await (new Budget({ name, amount })).save();
 
             budget = await Budget.findOne({ name });
 
-            expect(error).not.toBeUndefined();
-            expect(budget).toBeNull();
+            expect(budget).not.toBeNull();
+            expect(budget.name).toBe(name);
+            expect(budget.amount).toBe(amount);
         });
 
         it('should save a new budget in the database if the budget has a valid name and amount, and a valid array of purchase categories', async () => {
+            const purchaseCategories = testBudget.purchaseCategories;
+            
             await (new Budget({ name, amount, purchaseCategories })).save();
 
             budget = await Budget.findOne({ name });
@@ -113,7 +109,7 @@ describe('Budget Model', () => {
         });
 
         it('should return a plain object when getPublicObject() is called on a saved budget', async () => {
-            await (new Budget({ name, amount, purchaseCategories })).save();
+            await (new Budget({ name, amount })).save();
 
             budget = await Budget.findOne({ name });
 

@@ -13,12 +13,7 @@ const budgetSchema = new mongoose.Schema({
         required: true,
         min: 0.01
     },
-    purchaseCategories: {
-        type: [ purchaseCategorySchema ],
-        validate(val) {
-            return val.length > 0;
-        }
-    }
+    purchaseCategories: [ purchaseCategorySchema ]
 });
 
 //Instance methods
@@ -26,7 +21,8 @@ budgetSchema.methods.getPublicObject = function() {
     return {
         _id: this._id,
         name: this.name,
-        amount: this.amount
+        amount: this.amount,
+        purchaseCategories: this.purchaseCategories.map(purchaseCategory => purchaseCategory.getPublicObject())
     };
 };
 

@@ -47,7 +47,8 @@ userSchema.methods.getPublicObject = function() {
     return {
         _id: this._id,
         username: this.username,
-        email: this.email
+        email: this.email,
+        budgets: this.budgets.map(budget => budget.getPublicObject())
     };
 };
 

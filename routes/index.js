@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const mainRouter = require('./main');
+const webRouter = require('./web');
 const apiRouter = require('./api');
 
-//Main Routes
-router.use(mainRouter);
+//Web Routes
+router.use(webRouter);
 
 //API Routes
 router.use('/api', apiRouter);

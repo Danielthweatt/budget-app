@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 const debug = require('debug')('app:userController');
-const { User } = require('../models');
+const { User } = require('../../models');
 
 function validateSignUpFormInput(signUpFormInput) {
     const signUpFormInputSchema = Joi.object({
@@ -242,7 +242,7 @@ module.exports = {
             }
 
             req.session.user = user.getPublicObject();
-    
+
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
     
