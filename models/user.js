@@ -22,7 +22,16 @@ const userSchema = Schema({
         type: String,
         required: true,
         minlength: 8,
-        maxlength: 50
+        validate: {
+            validator: password => {
+                if (password && password.charAt(0) === '$') {
+                    return true; 
+                }
+
+                return password.length < 51; 
+            },
+            message: ({ path, value }) => `Path \`${path}\` (\`${value}\`) is longer than the maximum allowed length (50).`
+        }
     },
     budgets: [ {
         type: Schema.Types.ObjectId,

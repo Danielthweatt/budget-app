@@ -152,6 +152,18 @@ describe('User Model', () => {
             expect(hashedPasswordInDBMatchesPassword).toBeTruthy();
         });
 
+        it('should save a user with a hashed password even if it is longer than 50 characters', async () => {
+            user = await (new User({ username, email, password })).save();
+            
+            try {
+                await user.save();
+            } catch(err) {
+                error = err;
+            }
+
+            expect(error).toBeUndefined();
+        });
+
         it('should populate a saved user\'s budgets', async () => {
             const { name, amount } = testAccount.budgets[0];
 
