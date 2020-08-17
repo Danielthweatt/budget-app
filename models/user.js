@@ -24,7 +24,7 @@ const userSchema = Schema({
         minlength: 8,
         validate: {
             validator: password => {
-                if (password && password.charAt(0) === '$') {
+                if (password.charAt(0) === '$') {
                     return true; 
                 }
 
@@ -63,7 +63,7 @@ userSchema.methods.getPublicObject = function() {
 
 //Pre Hooks
 userSchema.pre('save', async function(next){
-	if (this.password && this.password.charAt(0) !== '$') {
+	if (this.password.charAt(0) !== '$') {
 		this.password = await this.constructor.hashPassword(this.password);
 		next();
 	} else {

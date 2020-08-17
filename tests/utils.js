@@ -12,13 +12,13 @@ exports.testBudget = {
 exports.testAccount = {
     username: 'Test Account', 
     email: 'test@example.com', 
-    password: 'Testing1!',
+    password: 'Testing1',
     budgets: [ exports.testBudget ]
 };
 
 exports.testAccount2 = {
     username: 'Test Account 2', 
     email: 'test2@example.com', 
-    password: 'Testing2!',
+    password: 'Testing2',
     budgets: [ exports.testBudget ]
 };

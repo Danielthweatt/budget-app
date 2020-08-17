@@ -194,6 +194,176 @@ describe('Web Routes', () => {
             expect(res.redirect).toBeTruthy();
         });
 
+        it('should not create a user and return a redirect if the password has an "!"', async () => {
+            password = `${password}!`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "@"', async () => {
+            password = `${password}@`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "#"', async () => {
+            password = `${password}#`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "$"', async () => {
+            password = `${password}$`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "%"', async () => {
+            password = `${password}%`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "^"', async () => {
+            password = `${password}^`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "&"', async () => {
+            password = `${password}&`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "*"', async () => {
+            password = `${password}*`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an "("', async () => {
+            password = `${password}(`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
+        it('should not create a user and return a redirect if the password has an ")"', async () => {
+            password = `${password})`;
+
+            res = await request(server).post('/sign-up').send({
+                username,
+                email,
+                password,
+                confirmPassword: password
+            });
+
+            user = await User.findOne({ username });
+
+            expect(user).toBeNull();
+            expect(res.status).toBe(302);
+            expect(res.redirect).toBeTruthy();
+        });
+
         it('should not create a user and return a redirect if the password has no numbers', async () => {
             password = `A${new Array(8).join('a')}`;
 
