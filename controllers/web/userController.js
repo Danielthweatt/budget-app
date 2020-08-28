@@ -137,7 +137,8 @@ module.exports = {
         debug('User does not already exist...');
         debug('Creating user...');
 
-        user = new User({ username, email, password });
+        user = new User({ username, email });
+        user.password = await User.hashPassword(password);
 
         await user.save();
 

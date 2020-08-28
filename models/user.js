@@ -20,18 +20,7 @@ const userSchema = Schema({
     },
     password: {
         type: String,
-        required: true,
-        minlength: 8,
-        validate: {
-            validator: password => {
-                if (password.charAt(0) === '$') {
-                    return true; 
-                }
-
-                return password.length < 51; 
-            },
-            message: ({ path, value }) => `Path \`${path}\` (\`${value}\`) is longer than the maximum allowed length (50).`
-        }
+        required: true
     },
     budgets: [ {
         type: Schema.Types.ObjectId,
@@ -60,16 +49,6 @@ userSchema.methods.getPublicObject = function() {
         budgets: this.budgets.map(budget => budget.getPublicObject())
     };
 };
-
-//Pre Hooks
-userSchema.pre('save', async function(next){
-	if (this.password.charAt(0) !== '$') {
-		this.password = await this.constructor.hashPassword(this.password);
-		next();
-	} else {
-		next();
-	}
-});
 
 module.exports = {
     userSchema,

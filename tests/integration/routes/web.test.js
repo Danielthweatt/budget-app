@@ -38,8 +38,11 @@ describe('Web Routes', () => {
         });
 
         it('should return a redirect if the user is logged in', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
 
+            await user.save();
+            
             agent = request.agent(server);
 
             await agent.post('/login').send({ username, password });
@@ -53,7 +56,10 @@ describe('Web Routes', () => {
 
     describe('POST /sign-up', () => {
         it('should not create a user and return a redirect if the user is logged in', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             agent = request.agent(server);
 
@@ -382,7 +388,10 @@ describe('Web Routes', () => {
         });
 
         it('should not create a user and return a redirect if a user by that username already exists', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             res = await request(server).post('/sign-up').send({
                 username,
@@ -423,7 +432,10 @@ describe('Web Routes', () => {
         });
 
         it('should return a redirect if the user is logged in', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             agent = request.agent(server);
 
@@ -438,7 +450,10 @@ describe('Web Routes', () => {
 
     describe('POST /login', () => {
         it('should return a redirect if the user is logged in', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             agent = request.agent(server);
 
@@ -451,7 +466,10 @@ describe('Web Routes', () => {
         });
 
         it('should not log in the user and return a redirect if there is no username', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             username = '';
 
@@ -469,7 +487,10 @@ describe('Web Routes', () => {
         });
 
         it('should not log in the user and return a redirect if there is no password', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             password = '';
 
@@ -501,7 +522,10 @@ describe('Web Routes', () => {
         });
 
         it('should log in a user and return a redirect if no user is logged in, the input is valid, and a user by that username does exist', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             agent = request.agent(server);
 
@@ -519,7 +543,10 @@ describe('Web Routes', () => {
 
     describe('GET /dashboard', () => {
         it('should return the dashboard if the user is logged in', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             agent = request.agent(server);
 
@@ -541,7 +568,10 @@ describe('Web Routes', () => {
 
     describe('POST /logout', () => {
         it('should log the user out and return a redirect if the user is logged in', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             agent = request.agent(server);
 

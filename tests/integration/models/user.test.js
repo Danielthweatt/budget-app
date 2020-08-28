@@ -11,7 +11,7 @@ describe('User Model', () => {
         require('../../../boot/db')();
     });
 
-    beforeEach(async () => {
+    beforeEach(() => {
         username = testAccount.username;
         email = testAccount.email;
         password = testAccount.password;
@@ -29,7 +29,10 @@ describe('User Model', () => {
             username = new Array(3).join('a');
 
             try {
-                await (new User({ username, email, password })).save();
+                user = new User({ username, email });
+                user.password = await User.hashPassword(password);
+
+                await user.save();
             } catch(err) {
                 error = err;
             }
@@ -44,7 +47,10 @@ describe('User Model', () => {
             username = new Array(52).join('a');
 
             try {
-                await (new User({ username, email, password })).save();
+                user = new User({ username, email });
+                user.password = await User.hashPassword(password);
+
+                await user.save();
             } catch(err) {
                 error = err;
             }
@@ -59,7 +65,10 @@ describe('User Model', () => {
             email = new Array(3).join('a');
 
             try {
-                await (new User({ username, email, password })).save();
+                user = new User({ username, email });
+                user.password = await User.hashPassword(password);
+
+                await user.save();
             } catch(err) {
                 error = err;
             }
@@ -74,7 +83,10 @@ describe('User Model', () => {
             email = new Array(52).join('a');
 
             try {
-                await (new User({ username, email, password })).save();
+                user = new User({ username, email });
+                user.password = await User.hashPassword(password);
+
+                await user.save();
             } catch(err) {
                 error = err;
             }
@@ -85,23 +97,8 @@ describe('User Model', () => {
             expect(user).toBeNull();
         });
 
-        it('should not save a new user in the database if the user\'s password is less than 8 characters', async () => {
-            password = new Array(8).join('a');
-
-            try {
-                await (new User({ username, email, password })).save();
-            } catch(err) {
-                error = err;
-            }
-
-            user = await User.findOne({ username });
-
-            expect(error).not.toBeUndefined();
-            expect(user).toBeNull();
-        });
-
-        it('should not save a new user in the database if the user\'s password is more than 50 characters', async () => {
-            password = new Array(52).join('a');
+        it('should not save a new user in the database if the user has no password', async () => {
+            password = '';
 
             try {
                 await (new User({ username, email, password })).save();
@@ -116,10 +113,16 @@ describe('User Model', () => {
         });
 
         it('should not save a new user in the database if a user by that username already exists', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             try {
-                await (new User({ username, email, password })).save();
+                user = new User({ username, email });
+                user.password = await User.hashPassword(password);
+
+                await user.save();
             } catch(err) {
                 error = err;
             }
@@ -131,7 +134,10 @@ describe('User Model', () => {
         });
 
         it('should save a new user in the database if the user has a valid username, email, and password, and a user by that username does not exist', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             user = await User.findOne({ username });
             const hashedPasswordInDBMatchesPassword = await bcrypt.compare(password, user.password);
@@ -142,34 +148,15 @@ describe('User Model', () => {
             expect(hashedPasswordInDBMatchesPassword).toBeTruthy();
         });
 
-        it('should hash a new user\'s plain text password when saving the user to the db', async () => {
-            user = await (new User({ username, email, password })).save();
-            const hashedPasswordMatchesPassword = await bcrypt.compare(password, user.password);
-            user = await User.findOne({ username });
-            const hashedPasswordInDBMatchesPassword = await bcrypt.compare(password, user.password);
-
-            expect(hashedPasswordMatchesPassword).toBeTruthy();
-            expect(hashedPasswordInDBMatchesPassword).toBeTruthy();
-        });
-
-        it('should save a user with a hashed password even if it is longer than 50 characters', async () => {
-            user = await (new User({ username, email, password })).save();
-            
-            try {
-                await user.save();
-            } catch(err) {
-                error = err;
-            }
-
-            expect(error).toBeUndefined();
-        });
-
         it('should populate a saved user\'s budgets', async () => {
             const { name, amount } = testAccount.budgets[0];
 
             const budget = await (new Budget({ name, amount })).save();
 
-            await (new User({ username, email, password, budgets: [ budget._id ] })).save();
+            user = new User({ username, email, budgets: [ budget._id ] });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
 
             user = await User.findOne({ username }).populate('budgets');
 
@@ -178,9 +165,12 @@ describe('User Model', () => {
         });
 
         it('should return a plain object when getPublicObject() is called on a saved user', async () => {
-            await (new User({ username, email, password })).save();
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
 
-            user = await User.findOne({ username }).populate('budgets');
+            await user.save();
+
+            user = await User.findOne({ username });
 
             const publicUser = user.getPublicObject();
 
