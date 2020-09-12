@@ -11,15 +11,12 @@ $(document).ready(function() {
 
     //Open modal targeted by data attribute on any element with .open-modal class
     $('.open-modal').click(function() {
-        var targetModal = $(this).data('target-modal');
-
-        $('#' + targetModal).addClass('is-active');
+        $('#' + $(this).data('target-modal')).addClass('is-active');
     });
 
-    //Close modal targeted by data attribute on any element with .close-modal class
+    //Close modal targeted by data attribute on any element with .close-modal class and 
+    //empty modal inputs
     $('.close-modal').click(function() {
-        var targetModal = $(this).data('target-modal');
-
-        $('#' + targetModal).removeClass('is-active');
+        $('#' + $(this).data('target-modal')).removeClass('is-active').find('input[type!=\'submit\']').val('');
     });
 });

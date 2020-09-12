@@ -32,7 +32,27 @@
                                 <p class="modal-card-title">Create Budget</p>
                                 <button class="delete close-modal" data-target-modal="createBudget"></button>
                             </header>
-                            <section class="modal-card-body"></section>
+                            <section class="modal-card-body">
+                                <form method="POST">
+                                    <div class="field has-addons">
+                                        <div class="control is-expanded">
+                                            <input 
+                                                class="input" 
+                                                type="text" 
+                                                name="name" 
+                                                placeholder="Name"
+                                                title="3 to 50 characters."
+                                                minlength="3"
+                                                maxlength="50"
+                                                required
+                                            >
+                                        </div>
+                                        <div class="control">
+                                            <input class="button is-dark" type="submit" value="Create">
+                                        </div>
+                                    </div>
+                                </form>
+                            </section>
                             <footer class="modal-card-foot">
                                 <button class="button close-modal" data-target-modal="createBudget">Cancel</button>
                             </footer>

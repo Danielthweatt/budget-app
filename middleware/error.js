@@ -9,5 +9,8 @@ module.exports = (err, req, res, next) => {
 
     debug('Sending 500 response...');
 
-    res.status(500).render('500');
+    res.status(500).render('500', { 
+        title: '500',
+        user: req.session.user
+    });
 };

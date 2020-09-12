@@ -9,5 +9,8 @@ module.exports = (req, res, next) => {
 
     debug('Sending 404 response...');
 
-    res.status(404).render('404');
+    res.status(404).render('404', { 
+        title: '404',
+        user: req.session.user
+    });
 };
