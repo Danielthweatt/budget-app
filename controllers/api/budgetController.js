@@ -41,14 +41,25 @@ module.exports = {
             return res.status(400).send(error.details[0].message);
         }
 
+        debug('Creating budget...');
+
         const budget = new Budget({ name });
 
         await budget.save();
 
+        debug('Relating budget to user...');
+
         const user = await User.findById(req.session.user._id);
 
         user.budgets.push(budget._id);
+
         await user.save();
+
+        debug('Saving budget in session...');
+
+        await user.populate('budgets').execPopulate();
+
+        req.session.user = user.getPublicObject();
 
         res.send(budget.getPublicObject());
     }

@@ -10,27 +10,30 @@
             <div class="tile is-parent">
                 <div class="tile is-child box">
                     <h2 class="title is-2">Budgets</h2>
-                    {{#if user.budgets.length}}
-                        <ul>
-                        {{#each user.budgets}}  
-                            <li>{{this.name}} - ${{this.amount}}</li>
-                        {{/each}}
+                    <div id="budgetMenu" class="menu">
+                        <ul class="menu-list">
+                        {{#if user.budgets.length}}
+                            {{#each user.budgets}}  
+                                <li><a href="/budget/{{this._id}}">{{this.name}} - ${{this.amount}}</a></li>
+                            {{/each}}
+                        {{/if}}
                         </ul>
-                    {{else}}
-                        <p>You have not created any budgets yet!</p>
-                    {{/if}}
+                    {{#unless user.budgets.length}}
+                        <p class="menu-label">You have not created any budgets yet!</p>
+                    {{/unless}}
+                    </div>
                     <button 
                         class="button is-dark is-small is-fullwidth mt-5 open-modal"
-                        data-target-modal="createBudget"    
+                        data-target-modal="createBudgetModal"    
                     >
                         Create Budget
                     </button>
-                    <div id="createBudget" class="modal">
-                        <div class="modal-background close-modal" data-target-modal="createBudget"></div>
+                    <div id="createBudgetModal" class="modal">
+                        <div class="modal-background close-modal" data-target-modal="createBudgetModal"></div>
                         <div class="modal-card">
                             <header class="modal-card-head">
                                 <p class="modal-card-title">Create Budget</p>
-                                <button class="delete close-modal" data-target-modal="createBudget"></button>
+                                <button class="delete close-modal" data-target-modal="createBudgetModal"></button>
                             </header>
                             <section class="modal-card-body">
                                 <form id="createBudgetForm">
@@ -54,7 +57,7 @@
                                 </form>
                             </section>
                             <footer class="modal-card-foot">
-                                <button class="button close-modal" data-target-modal="createBudget">Cancel</button>
+                                <button class="button close-modal" data-target-modal="createBudgetModal">Cancel</button>
                             </footer>
                         </div>
                     </div>
@@ -66,8 +69,26 @@
 <script>
     //Page scripts
     $(document).ready(function() {
-        $('#createBudgetForm').submit(function(e) {
+        var budgetMenu = $('#budgetMenu');
+        var createBudgetModal = $('#createBudgetModal');
+        var createBudgetForm = $('#createBudgetForm');
+
+        createBudgetForm.submit(function(e) {
             e.preventDefault();
+            $.ajax({
+                url: '/api/budget',
+                method: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: createBudgetForm.serialize(),
+                success: function(data) {
+                    budgetMenu.find('p').remove();
+                    budgetMenu.find('ul').append('<li><a href="/budget/' + data._id + '">' + data.name + ' - $' + data.amount + '</a></li>');
+                    createBudgetModal.find('.close-modal').eq(0).click();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                     //TODO: finish
+                }
+            })
         });
     });
 </script>
