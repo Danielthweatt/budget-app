@@ -9,7 +9,7 @@ const purchaseCategorySchema = new mongoose.Schema({
     },
     amount: {
         type: Number,
-        min: 0.01
+        default: 0.00
     }
 });
 

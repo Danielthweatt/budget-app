@@ -10,8 +10,7 @@ const budgetSchema = new mongoose.Schema({
     },
     amount: {
         type: Number,
-        required: true,
-        min: 0.01
+        default: 0.00
     },
     purchaseCategories: [ purchaseCategorySchema ]
 });

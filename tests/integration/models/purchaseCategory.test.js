@@ -51,8 +51,8 @@ describe('PurchaseCategory Model', () => {
         expect(purchaseCategory).toBeNull();
     });
 
-    it('should not save a new purchase category in the database if the purchase category\'s amount is less than 0.01', async () => {
-        amount = 0.00;
+    it('should default a purchase category\'s amount to 0.00 if no amount is set', async () => {
+        amount = undefined;
 
         try {
             await (new PurchaseCategory({ name, amount })).save();
@@ -62,8 +62,8 @@ describe('PurchaseCategory Model', () => {
 
         purchaseCategory = await PurchaseCategory.findOne({ name });
 
-        expect(error).not.toBeUndefined();
-        expect(purchaseCategory).toBeNull();
+        expect(error).toBeUndefined();
+        expect(purchaseCategory.amount).toBe(0.00);
     });
 
     it('should save a new purchase category in the database if the pruchase category has a valid name and amount', async () => {

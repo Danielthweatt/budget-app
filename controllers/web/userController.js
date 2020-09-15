@@ -102,7 +102,9 @@ module.exports = {
         if (error) {
             debug('Validation errors:');
 
-            error.details.forEach(({ message }) => debug(` ${message}`));
+            error.details.forEach(({ message }) => {
+                debug(` ${message}`); 
+            });
 
             debug('Redirecting to sign-up form...');
             
@@ -184,7 +186,9 @@ module.exports = {
         if (error) {
             debug('Validation errors:');
 
-            error.details.forEach(({ message }) => debug(` ${message}`));
+            error.details.forEach(({ message }) => { 
+                debug(` ${message}`); 
+            });
 
             debug('Redirecting to login form...');
             

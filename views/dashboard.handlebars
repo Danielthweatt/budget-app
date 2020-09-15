@@ -33,7 +33,7 @@
                                 <button class="delete close-modal" data-target-modal="createBudget"></button>
                             </header>
                             <section class="modal-card-body">
-                                <form method="POST">
+                                <form id="createBudgetForm">
                                     <div class="field has-addons">
                                         <div class="control is-expanded">
                                             <input 
@@ -63,3 +63,11 @@
         </div>
     </div>
 </section>
+<script>
+    //Page scripts
+    $(document).ready(function() {
+        $('#createBudgetForm').submit(function(e) {
+            e.preventDefault();
+        });
+    });
+</script>

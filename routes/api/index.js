@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const purchasesRouter = require('./purchases');
+const budgetRouter = require('./budget');
 
-router.use('/purchases', purchasesRouter);
+router.use('/budget', budgetRouter);
 
 module.exports = router;

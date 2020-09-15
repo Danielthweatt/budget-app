@@ -53,7 +53,7 @@ describe('Budget Model', () => {
             expect(budget).toBeNull();
         });
 
-        it('should not save a new budget in the database if the budget\'s amount is not set', async () => {
+        it('should default a budget\'s amount to 0.00 if no amount is set', async () => {
             amount = undefined;
 
             try {
@@ -64,23 +64,8 @@ describe('Budget Model', () => {
 
             budget = await Budget.findOne({ name });
 
-            expect(error).not.toBeUndefined();
-            expect(budget).toBeNull();
-        });
-
-        it('should not save a new budget in the database if the budget\'s amount is less than 0.01', async () => {
-            amount = 0.00;
-
-            try {
-                await (new Budget({ name, amount })).save();
-            } catch(err) {
-                error = err;
-            }
-
-            budget = await Budget.findOne({ name });
-
-            expect(error).not.toBeUndefined();
-            expect(budget).toBeNull();
+            expect(error).toBeUndefined();
+            expect(budget.amount).toBe(0.00);
         });
 
         it('should save a new budget in the database if the budget has a valid name and amount', async () => {
