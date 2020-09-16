@@ -3,7 +3,7 @@ const { testBudget, testAccount } = require('../../../utils');
 const { User } = require('../../../../models');
 const { Budget } = require('../../../../models/budget');
 
-let server, name, username, email, password, res, agent;
+let server, name, amount, username, email, password, res, agent;
 
 process.env.PORT = 3002;
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_budget_api_tests';
@@ -12,6 +12,7 @@ describe('Budget API Routes', () => {
     beforeEach(() => {
         server = require('../../../../app');
         name = testBudget.name;
+        amount = testBudget.amount;
         username = testAccount.username;
         email = testAccount.email;
         password = testAccount.password;
@@ -26,7 +27,7 @@ describe('Budget API Routes', () => {
 
     describe('POST /', () => {
         it('should return 401 if the user is not logged in', async () => {
-            res = await request(server).post('/api/budget').send({ name });
+            res = await request(server).post('/api/budget').send({ name, amount });
 
             expect(res.status).toBe(401);
         });
@@ -43,7 +44,7 @@ describe('Budget API Routes', () => {
 
             name = new Array(3).join('a');
 
-            res = await agent.post('/api/budget').send({ name });
+            res = await agent.post('/api/budget').send({ name, amount });
 
             expect(res.status).toBe(400);
         });
@@ -60,7 +61,24 @@ describe('Budget API Routes', () => {
 
             name = new Array(52).join('a');
 
-            res = await agent.post('/api/budget').send({ name });
+            res = await agent.post('/api/budget').send({ name, amount });
+
+            expect(res.status).toBe(400);
+        });
+
+        it('should return 400 if the budget\'s amount is less than 0', async () => {
+            user = new User({ username, email });
+            user.password = await User.hashPassword(password);
+
+            await user.save();
+
+            agent = request.agent(server);
+
+            await agent.post('/login').send({ username, password });
+
+            amount = -1;
+
+            res = await agent.post('/api/budget').send({ name, amount });
 
             expect(res.status).toBe(400);
         });
@@ -75,11 +93,12 @@ describe('Budget API Routes', () => {
 
             await agent.post('/login').send({ username, password });
 
-            res = await agent.post('/api/budget').send({ name });
+            res = await agent.post('/api/budget').send({ name, amount });
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('_id');
             expect(res.body.name).toBe(name);
+            expect(res.body.amount).toBe(amount);
 
             const budget = await Budget.findById(res.body._id);
 
@@ -96,11 +115,12 @@ describe('Budget API Routes', () => {
 
             await agent.post('/login').send({ username, password });
 
-            res = await agent.post('/api/budget').send({ name });
+            res = await agent.post('/api/budget').send({ name, amount });
 
             user = await User.findOne({ username }).populate('budgets');
 
             expect(user.budgets[0].name).toBe(name);
+            expect(user.budgets[0].amount).toBe(amount);
         });
     });
 });

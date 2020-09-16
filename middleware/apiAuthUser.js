@@ -6,7 +6,13 @@ module.exports = (req, res, next) => {
     if (!req.session.user) {
         debug('User is not logged in...');
 
-        return res.status(401).send('Access denied. User not authenticated.');
+        return res.status(401).send({
+            error: {
+                details: [{
+                    message: 'Access denied. User not authenticated.'
+                }]
+            }
+        });
     }
 
     debug('User is logged in...');

@@ -36,9 +36,10 @@
                                 <button class="delete close-modal" data-target-modal="createBudgetModal"></button>
                             </header>
                             <section class="modal-card-body">
+                                {{> form-submission-errors}}
                                 <form id="createBudgetForm">
-                                    <div class="field has-addons">
-                                        <div class="control is-expanded">
+                                    <div class="field">
+                                        <div class="control">
                                             <input 
                                                 class="input" 
                                                 type="text" 
@@ -50,15 +51,33 @@
                                                 required
                                             >
                                         </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <input 
+                                                class="input" 
+                                                type="number" 
+                                                name="amount" 
+                                                placeholder="Monthly Amount (Optional)"
+                                                title="Optional."
+                                                step="0.01"
+                                                min="0"
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="field is-grouped">
                                         <div class="control">
                                             <input class="button is-dark" type="submit" value="Create">
+                                        </div>
+                                        <div class="control">
+                                            <button class="button close-modal" data-target-modal="createBudgetModal">
+                                                Cancel
+                                            </button>
                                         </div>
                                     </div>
                                 </form>
                             </section>
-                            <footer class="modal-card-foot">
-                                <button class="button close-modal" data-target-modal="createBudgetModal">Cancel</button>
-                            </footer>
+                            <footer class="modal-card-foot"></footer>
                         </div>
                     </div>
                 </div>
@@ -71,6 +90,7 @@
     $(document).ready(function() {
         var budgetMenu = $('#budgetMenu');
         var createBudgetModal = $('#createBudgetModal');
+        var createBudgetFormSubmissionErrors = createBudgetModal.find('#formSubmissionErrors');
         var createBudgetForm = $('#createBudgetForm');
 
         createBudgetForm.submit(function(e) {
@@ -82,11 +102,19 @@
                 data: createBudgetForm.serialize(),
                 success: function(data) {
                     budgetMenu.find('p').remove();
-                    budgetMenu.find('ul').append('<li><a href="/budget/' + data._id + '">' + data.name + ' - $' + data.amount + '</a></li>');
+                    budgetMenu.find('ul')
+                                .append('<li><a href="/budget/' + data._id + '">' + data.name + ' - $' + data.amount + '</a></li>');
                     createBudgetModal.find('.close-modal').eq(0).click();
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                     //TODO: finish
+                error: function(jqXHR) {
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                        jqXHR.responseJSON.error.details.forEach(function(detail) {
+                            createBudgetFormSubmissionErrors.find('ul')
+                                                                .empty()
+                                                                .append('<li>' + detail.message + '</li>');
+                            createBudgetFormSubmissionErrors.removeClass('is-hidden');
+                        });
+                    }
                 }
             })
         });

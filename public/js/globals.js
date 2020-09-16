@@ -17,6 +17,10 @@ $(document).ready(function() {
     //Close modal targeted by data attribute on any element with .close-modal class and 
     //empty modal inputs
     $('.close-modal').click(function() {
-        $('#' + $(this).data('target-modal')).removeClass('is-active').find('input[type!=\'submit\']').val('');
+        var targetModal = $('#' + $(this).data('target-modal'));
+        
+        targetModal.removeClass('is-active');
+        targetModal.find('input[type!=\'submit\']').val('');
+        targetModal.find('#formSubmissionErrors').addClass('is-hidden').find('ul').empty();
     });
 });

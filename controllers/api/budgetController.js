@@ -14,7 +14,14 @@ function validateCreateBudgetFormInput(createBudgetFormInput) {
                         'string.min': 'Name must be at least 3 characters long.',
                         'string.max': 'Name must be at most 50 characters long.',
                         'any.required': 'Must have a name.'
-                    })
+                    }),
+        amount: Joi.number()
+                        .positive()
+                        .messages({
+                            'number.base': 'Monthly Amount must be a number.',
+                            'number.infinity': 'Monthly Amount cannot be infinity or negative infinity.',
+                            'number.positive': 'Monthly Amount must be positive.'
+                        })
     });
 
     return createBudgetFormInputSchema.validate(createBudgetFormInput, { abortEarly: false });
@@ -25,7 +32,6 @@ module.exports = {
         debug('postBudget()');
 
         const { body } = req;
-        const { name } = body;
 
         debug('Validating create budget form input...');
         
@@ -38,12 +44,20 @@ module.exports = {
                 debug(` ${message}`); 
             });
 
-            return res.status(400).send(error.details[0].message);
+            return res.status(400).send({
+                error: {
+                    details: error.details.map(({ message }) => {
+                        return {
+                            message
+                        };
+                    })
+                }
+            });
         }
 
         debug('Creating budget...');
 
-        const budget = new Budget({ name });
+        const budget = new Budget(body);
 
         await budget.save();
 
