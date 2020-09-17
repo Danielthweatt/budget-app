@@ -1,5 +1,5 @@
 const request = require('supertest');
-const { testAccount, testAccount2 } = require('../../utils');
+const { testAccount, testAccount2 } = require('../../test-documents');
 const { User } = require('../../../models');
 
 let server, username, email, password, agent, res, user;

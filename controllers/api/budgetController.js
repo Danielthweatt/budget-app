@@ -15,7 +15,7 @@ function validateCreateBudgetFormInput(createBudgetFormInput) {
                         'string.max': 'Name must be at most 50 characters long.',
                         'any.required': 'Must have a name.'
                     }),
-        amount: Joi.number()
+        monthlyAmount: Joi.number()
                         .positive()
                         .messages({
                             'number.base': 'Monthly Amount must be a number.',

@@ -1,11 +1,11 @@
 exports.testPurchaseCategory = {
     name: 'Rent',
-    amount: 800
+    monthlyAmount: 800
 };
 
 exports.testBudget = {
     name: 'Test Budget', 
-    amount: 5000,
+    monthlyAmount: 5000,
     purchaseCategories: [ exports.testPurchaseCategory ]
 };
 

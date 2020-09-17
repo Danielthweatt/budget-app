@@ -1,9 +1,8 @@
 const request = require('supertest');
-const { testBudget, testAccount } = require('../../../utils');
-const { User } = require('../../../../models');
-const { Budget } = require('../../../../models/budget');
+const { testBudget, testAccount } = require('../../../test-documents');
+const { User, Budget } = require('../../../../models');
 
-let server, name, amount, username, email, password, res, agent;
+let server, name, monthlyAmount, username, email, password, res, agent;
 
 process.env.PORT = 3002;
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_budget_api_tests';
@@ -12,7 +11,7 @@ describe('Budget API Routes', () => {
     beforeEach(() => {
         server = require('../../../../app');
         name = testBudget.name;
-        amount = testBudget.amount;
+        monthlyAmount = testBudget.monthlyAmount;
         username = testAccount.username;
         email = testAccount.email;
         password = testAccount.password;
@@ -27,7 +26,7 @@ describe('Budget API Routes', () => {
 
     describe('POST /', () => {
         it('should return 401 if the user is not logged in', async () => {
-            res = await request(server).post('/api/budget').send({ name, amount });
+            res = await request(server).post('/api/budget').send({ name, monthlyAmount });
 
             expect(res.status).toBe(401);
         });
@@ -44,7 +43,7 @@ describe('Budget API Routes', () => {
 
             name = new Array(3).join('a');
 
-            res = await agent.post('/api/budget').send({ name, amount });
+            res = await agent.post('/api/budget').send({ name, monthlyAmount });
 
             expect(res.status).toBe(400);
         });
@@ -61,12 +60,12 @@ describe('Budget API Routes', () => {
 
             name = new Array(52).join('a');
 
-            res = await agent.post('/api/budget').send({ name, amount });
+            res = await agent.post('/api/budget').send({ name, monthlyAmount });
 
             expect(res.status).toBe(400);
         });
 
-        it('should return 400 if the budget\'s amount is less than 0', async () => {
+        it('should return 400 if the budget\'s monthly amount is less than 0', async () => {
             user = new User({ username, email });
             user.password = await User.hashPassword(password);
 
@@ -76,9 +75,9 @@ describe('Budget API Routes', () => {
 
             await agent.post('/login').send({ username, password });
 
-            amount = -1;
+            monthlyAmount = -1;
 
-            res = await agent.post('/api/budget').send({ name, amount });
+            res = await agent.post('/api/budget').send({ name, monthlyAmount });
 
             expect(res.status).toBe(400);
         });
@@ -93,12 +92,12 @@ describe('Budget API Routes', () => {
 
             await agent.post('/login').send({ username, password });
 
-            res = await agent.post('/api/budget').send({ name, amount });
+            res = await agent.post('/api/budget').send({ name, monthlyAmount });
 
             expect(res.status).toBe(200);
             expect(res.body).toHaveProperty('_id');
             expect(res.body.name).toBe(name);
-            expect(res.body.amount).toBe(amount);
+            expect(res.body.monthlyAmount).toBe(monthlyAmount);
 
             const budget = await Budget.findById(res.body._id);
 
@@ -115,12 +114,12 @@ describe('Budget API Routes', () => {
 
             await agent.post('/login').send({ username, password });
 
-            res = await agent.post('/api/budget').send({ name, amount });
+            res = await agent.post('/api/budget').send({ name, monthlyAmount });
 
             user = await User.findOne({ username }).populate('budgets');
 
             expect(user.budgets[0].name).toBe(name);
-            expect(user.budgets[0].amount).toBe(amount);
+            expect(user.budgets[0].monthlyAmount).toBe(monthlyAmount);
         });
     });
 });

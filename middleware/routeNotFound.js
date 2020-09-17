@@ -4,7 +4,7 @@ const debug = require('debug')('app:routeNotFoundMiddleware');
 
 const message = config.get('404Message');
 
-module.exports = (req, res, next) => {
+module.exports = (req, res) => {
     debug('Route not found...');
     debug('Logging error...');
 

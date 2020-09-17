@@ -1,7 +1,7 @@
-const { testPurchaseCategory } = require('../../utils');
+const { testPurchaseCategory } = require('../../test-documents');
 const { PurchaseCategory } = require('../../../models');
 
-let name, amount, error, purchaseCategory;
+let name, monthlyAmount, error, purchaseCategory;
 
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_purchase_category_tests';
 
@@ -12,7 +12,7 @@ describe('PurchaseCategory Model', () => {
 
     beforeEach(() => {
         name = testPurchaseCategory.name;
-        amount = testPurchaseCategory.amount;
+        monthlyAmount = testPurchaseCategory.monthlyAmount;
         error = undefined;
         purchaseCategory = undefined;
     });
@@ -25,7 +25,7 @@ describe('PurchaseCategory Model', () => {
         name = new Array(3).join('a');
 
         try {
-            await (new PurchaseCategory({ name, amount })).save();
+            await (new PurchaseCategory({ name, monthlyAmount })).save();
         } catch(err) {
             error = err;
         }
@@ -40,7 +40,7 @@ describe('PurchaseCategory Model', () => {
         name = new Array(52).join('a');
 
         try {
-            await (new PurchaseCategory({ name, amount })).save();
+            await (new PurchaseCategory({ name, monthlyAmount })).save();
         } catch(err) {
             error = err;
         }
@@ -51,11 +51,11 @@ describe('PurchaseCategory Model', () => {
         expect(purchaseCategory).toBeNull();
     });
 
-    it('should default a purchase category\'s amount to 0.00 if no amount is set', async () => {
-        amount = undefined;
+    it('should default a purchase category\'s monthly amount to 0.00 if no amount is set', async () => {
+        monthlyAmount = undefined;
 
         try {
-            await (new PurchaseCategory({ name, amount })).save();
+            await (new PurchaseCategory({ name, monthlyAmount })).save();
         } catch(err) {
             error = err;
         }
@@ -63,21 +63,21 @@ describe('PurchaseCategory Model', () => {
         purchaseCategory = await PurchaseCategory.findOne({ name });
 
         expect(error).toBeUndefined();
-        expect(purchaseCategory.amount).toBe(0.00);
+        expect(purchaseCategory.monthlyAmount).toBe(0.00);
     });
 
-    it('should save a new purchase category in the database if the pruchase category has a valid name and amount', async () => {
-        await (new PurchaseCategory({ name, amount })).save();
+    it('should save a new purchase category in the database if the pruchase category has a valid name and monthly amount', async () => {
+        await (new PurchaseCategory({ name, monthlyAmount })).save();
 
         purchaseCategory = await PurchaseCategory.findOne({ name });
 
         expect(purchaseCategory).not.toBeNull();
         expect(purchaseCategory.name).toBe(name);
-        expect(purchaseCategory.amount).toBe(amount);
+        expect(purchaseCategory.monthlyAmount).toBe(monthlyAmount);
     });
 
     it('should return a plain object when getPublicObject() is called on a saved purchase category', async () => {
-        await (new PurchaseCategory({ name, amount })).save();
+        await (new PurchaseCategory({ name, monthlyAmount })).save();
 
         purchaseCategory = await PurchaseCategory.findOne({ name });
 

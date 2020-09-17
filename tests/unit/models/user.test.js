@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { testAccount } = require('../../utils');
+const { testAccount } = require('../../test-documents');
 const { User } = require('../../../models');
 
 let username, email, password, salt, user;

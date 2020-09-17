@@ -1,7 +1,7 @@
-const { testBudget } = require('../../utils');
+const { testBudget } = require('../../test-documents');
 const { Budget } = require('../../../models');
 
-let name, amount, error, budget;
+let name, monthlyAmount, error, budget;
 
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_budget_tests';
 
@@ -12,7 +12,7 @@ describe('Budget Model', () => {
 
     beforeEach(() => {
         name = testBudget.name;
-        amount = testBudget.amount;
+        monthlyAmount = testBudget.monthlyAmount;
         error = undefined;
         budget = undefined;
     });
@@ -27,7 +27,7 @@ describe('Budget Model', () => {
             name = new Array(3).join('a');
 
             try {
-                await (new Budget({ name, amount })).save();
+                await (new Budget({ name, monthlyAmount })).save();
             } catch(err) {
                 error = err;
             }
@@ -42,7 +42,7 @@ describe('Budget Model', () => {
             name = new Array(52).join('a');
 
             try {
-                await (new Budget({ name, amount })).save();
+                await (new Budget({ name, monthlyAmount })).save();
             } catch(err) {
                 error = err;
             }
@@ -53,11 +53,11 @@ describe('Budget Model', () => {
             expect(budget).toBeNull();
         });
 
-        it('should default a budget\'s amount to 0.00 if no amount is set', async () => {
-            amount = undefined;
+        it('should default a budget\'s monthly amount to 0.00 if no amount is set', async () => {
+            monthlyAmount = undefined;
 
             try {
-                await (new Budget({ name, amount })).save();
+                await (new Budget({ name, monthlyAmount })).save();
             } catch(err) {
                 error = err;
             }
@@ -65,36 +65,36 @@ describe('Budget Model', () => {
             budget = await Budget.findOne({ name });
 
             expect(error).toBeUndefined();
-            expect(budget.amount).toBe(0.00);
+            expect(budget.monthlyAmount).toBe(0.00);
         });
 
-        it('should save a new budget in the database if the budget has a valid name and amount', async () => {
-            await (new Budget({ name, amount })).save();
+        it('should save a new budget in the database if the budget has a valid name and monthly amount', async () => {
+            await (new Budget({ name, monthlyAmount })).save();
 
             budget = await Budget.findOne({ name });
 
             expect(budget).not.toBeNull();
             expect(budget.name).toBe(name);
-            expect(budget.amount).toBe(amount);
+            expect(budget.monthlyAmount).toBe(monthlyAmount);
         });
 
-        it('should save a new budget in the database if the budget has a valid name and amount, and a valid array of purchase categories', async () => {
+        it('should save a new budget in the database if the budget has a valid name and monthly amount, and a valid array of purchase categories', async () => {
             const purchaseCategories = testBudget.purchaseCategories;
             
-            await (new Budget({ name, amount, purchaseCategories })).save();
+            await (new Budget({ name, monthlyAmount, purchaseCategories })).save();
 
             budget = await Budget.findOne({ name });
 
             expect(budget).not.toBeNull();
             expect(budget.name).toBe(name);
-            expect(budget.amount).toBe(amount);
+            expect(budget.monthlyAmount).toBe(monthlyAmount);
             expect(budget.purchaseCategories.length).toBe(purchaseCategories.length);
             expect(budget.purchaseCategories[0].name).toBe(purchaseCategories[0].name);
-            expect(budget.purchaseCategories[0].amount).toBe(purchaseCategories[0].amount);
+            expect(budget.purchaseCategories[0].monthlyAmount).toBe(purchaseCategories[0].monthlyAmount);
         });
 
         it('should return a plain object when getPublicObject() is called on a saved budget', async () => {
-            await (new Budget({ name, amount })).save();
+            await (new Budget({ name, monthlyAmount })).save();
 
             budget = await Budget.findOne({ name });
 

@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { testAccount } = require('../../utils');
+const { testAccount } = require('../../test-documents');
 const { User, Budget } = require('../../../models');
 
 let username, email, password, error, user;
@@ -149,9 +149,9 @@ describe('User Model', () => {
         });
 
         it('should populate a saved user\'s budgets', async () => {
-            const { name, amount } = testAccount.budgets[0];
+            const { name, monthlyAmount } = testAccount.budgets[0];
 
-            const budget = await (new Budget({ name, amount })).save();
+            const budget = await (new Budget({ name, monthlyAmount })).save();
 
             user = new User({ username, email, budgets: [ budget._id ] });
             user.password = await User.hashPassword(password);
@@ -161,7 +161,7 @@ describe('User Model', () => {
             user = await User.findOne({ username }).populate('budgets');
 
             expect(user.budgets[0].name).toBe(name);
-            expect(user.budgets[0].amount).toBe(amount);
+            expect(user.budgets[0].monthlyAmount).toBe(monthlyAmount);
         });
 
         it('should return a plain object when getPublicObject() is called on a saved user', async () => {

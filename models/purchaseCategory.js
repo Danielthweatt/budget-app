@@ -7,7 +7,7 @@ const purchaseCategorySchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 50
     },
-    amount: {
+    monthlyAmount: {
         type: Number,
         default: 0.00
     }
@@ -18,7 +18,7 @@ purchaseCategorySchema.methods.getPublicObject = function() {
     return {
         _id: this._id,
         name: this.name,
-        amount: this.amount
+        monthlyAmount: this.monthlyAmount
     };
 };
 
