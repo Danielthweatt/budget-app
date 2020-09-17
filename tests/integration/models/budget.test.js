@@ -5,7 +5,7 @@ let name, monthlyAmount, error, budget;
 
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_budget_tests';
 
-describe('Budget Model', () => {
+describe('Budget Model Integration Tests', () => {
     beforeAll(() => {
         require('../../../boot/db')();
     });

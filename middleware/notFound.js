@@ -1,11 +1,11 @@
 const config = require('config');
 const winston = require('winston');
-const debug = require('debug')('app:routeNotFoundMiddleware');
+const debug = require('debug')('app:notFoundMiddleware');
 
 const message = config.get('404Message');
 
 module.exports = (req, res) => {
-    debug('Route not found...');
+    debug('Not found...');
     debug('Logging error...');
 
     winston.error(`404 - Not found - ${req.originalUrl} - ${req.method} - ${req.ip}`);

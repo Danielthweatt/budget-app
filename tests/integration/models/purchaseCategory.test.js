@@ -5,7 +5,7 @@ let name, monthlyAmount, error, purchaseCategory;
 
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_purchase_category_tests';
 
-describe('PurchaseCategory Model', () => {
+describe('PurchaseCategory Model Integration Tests', () => {
     beforeAll(() => {
         require('../../../boot/db')();
     });

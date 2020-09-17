@@ -1,12 +1,12 @@
 const request = require('supertest');
-const { testAccount, testAccount2 } = require('../../test-documents');
-const { User } = require('../../../models');
+const { testAccount, testAccount2 } = require('../../../test-documents');
+const { User } = require('../../../../models');
 
 let server, username, email, password, agent, res, user;
 
-describe('Web Routes', () => {
+describe('User Web Routes Integration Tests', () => {
     beforeEach(() => {
-        server = require('../../../app');
+        server = require('../../../../app');
         username = testAccount.username;
         email = testAccount.email;
         password = testAccount.password;

@@ -14,7 +14,7 @@
                         <ul class="menu-list">
                         {{#if user.budgets.length}}
                             {{#each user.budgets}}  
-                                <li><a href="/budget/{{this._id}}">{{this.name}} - ${{this.monthlyAmount}}</a></li>
+                                <li><a href="/manage-budget/{{this._id}}">{{this.name}} - ${{this.monthlyAmount}}</a></li>
                             {{/each}}
                         {{/if}}
                         </ul>
@@ -61,7 +61,7 @@
                                                 placeholder="Monthly Amount (Optional)"
                                                 title="Optional."
                                                 step="0.01"
-                                                min="0"
+                                                min="1"
                                             >
                                         </div>
                                     </div>
@@ -103,7 +103,7 @@
                 success: function(data) {
                     budgetMenu.find('p').remove();
                     budgetMenu.find('ul')
-                                .append('<li><a href="/budget/' + data._id + '">' + data.name + ' - $' + data.monthlyAmount + '</a></li>');
+                                .append('<li><a href="/manage-budget/' + data._id + '">' + data.name + ' - $' + data.monthlyAmount + '</a></li>');
                     createBudgetModal.find('.close-modal').eq(0).click();
                 },
                 error: function(jqXHR) {

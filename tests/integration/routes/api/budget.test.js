@@ -2,12 +2,12 @@ const request = require('supertest');
 const { testBudget, testAccount } = require('../../../test-documents');
 const { User, Budget } = require('../../../../models');
 
-let server, name, monthlyAmount, username, email, password, res, agent;
+let server, name, monthlyAmount, username, email, password, res, agent, user;
 
-process.env.PORT = 3002;
+process.env.PORT = 3003;
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_budget_api_tests';
 
-describe('Budget API Routes', () => {
+describe('Budget API Routes Integration Tests', () => {
     beforeEach(() => {
         server = require('../../../../app');
         name = testBudget.name;
@@ -17,10 +17,12 @@ describe('Budget API Routes', () => {
         password = testAccount.password;
         res = undefined;
         agent = undefined;
+        user = undefined;
     });
 
     afterEach(async () => {
         await User.deleteMany({});
+        await Budget.deleteMany({});
         await server.close();
     });
 
@@ -99,7 +101,7 @@ describe('Budget API Routes', () => {
             expect(res.body.name).toBe(name);
             expect(res.body.monthlyAmount).toBe(monthlyAmount);
 
-            const budget = await Budget.findById(res.body._id);
+            const budget = await Budget.findOne({ name });
 
             expect(budget).not.toBeNull();
         });

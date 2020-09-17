@@ -1,12 +1,12 @@
 const debug = require('debug')('app:boot');
 const router = require('../routes');
-const routeNotFound = require('../middleware/routeNotFound');
+const notFound = require('../middleware/notFound');
 const error = require('../middleware/error');
 
 module.exports = app => {
     //Routes
     app.use(router);
-    app.use(routeNotFound);
+    app.use(notFound);
 
     debug('Routes registered...');
 

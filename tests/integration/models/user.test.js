@@ -6,7 +6,7 @@ let username, email, password, error, user;
 
 process.env.MONGODB_URI = 'mongodb://localhost:27017/budget_app_user_tests';
 
-describe('User Model', () => {
+describe('User Model Integration Tests', () => {
     beforeAll(() => {
         require('../../../boot/db')();
     });

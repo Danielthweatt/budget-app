@@ -4,7 +4,7 @@ const { User } = require('../../../models');
 
 let username, email, password, salt, user;
 
-describe('User Model', () => {
+describe('User Model Unit Tests', () => {
     beforeAll(async () => {
         salt = await bcrypt.genSalt(10);
     });
@@ -26,7 +26,7 @@ describe('User Model', () => {
     });
 
     describe('user.checkPassword', () => {
-        it('should return false if the plain text password argument doesn\'t matche the user\'s saved, hashed password', async () => {
+        it('should return false if the plain text password argument doesn\'t match the user\'s saved, hashed password', async () => {
             user = new User({ username, email });
             user.password = await bcrypt.hash(password, salt);
             password = 'aDifferentPassword';

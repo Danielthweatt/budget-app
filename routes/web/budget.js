@@ -1,8 +1,8 @@
 const router = require('express').Router();
 const authUser = require('../../middleware/authUser');
 const asyncHandler = require('../../middleware/asyncHandler');
-const budgetController = require('../../controllers/api/budgetController');
+const budgetController = require('../../controllers/web/budgetController');
 
-router.post('/', authUser, asyncHandler(budgetController.postBudget));
+router.get('/manage-budget/:_id', authUser, asyncHandler(budgetController.getManageBudget));
 
 module.exports = router;

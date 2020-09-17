@@ -7,15 +7,14 @@
                     {{> form-submission-errors}}
                 {{/if}}
                 <form method="POST" action="/sign-up">
-                {{#with signUpFormInput}}
                     <div class="field">
                         <div class="control">
                             <input 
                                 class="input" 
                                 type="text" 
                                 name="username" 
-                                {{#if username}} 
-                                    value="{{username}}" 
+                                {{#if signUpFormInput.username}} 
+                                    value="{{signUpFormInput.username}}" 
                                 {{/if}} 
                                 placeholder="Username" 
                                 title="3 to 50 characters."
@@ -31,8 +30,8 @@
                                 class="input" 
                                 type="email" 
                                 name="email" 
-                                {{#if email}} 
-                                    value="{{email}}" 
+                                {{#if signUpFormInput.email}} 
+                                    value="{{signUpFormInput.email}}" 
                                 {{/if}} 
                                 placeholder="Email" 
                                 title="A valid email address."
@@ -40,7 +39,6 @@
                             >
                         </div>
                     </div>
-                {{/with}}
                     <div class="field">
                         <div class="control">
                             <input 

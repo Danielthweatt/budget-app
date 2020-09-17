@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-const debug = require('debug')('app:userController');
+const debug = require('debug')('app:webUserController');
 const { User } = require('../../models');
 
 function validateSignUpFormInput(signUpFormInput) {
@@ -85,6 +85,7 @@ module.exports = {
 
         res.render('sign-up-form', { 
             title: 'Sign Up',
+            user: req.session.user,
             formSubmissionError: formSubmissionError || null,
             signUpFormInput: signUpFormInput || {}
         });
@@ -169,6 +170,7 @@ module.exports = {
 
         res.render('login-form', { 
             title: 'Login',
+            user: req.session.user,
             formSubmissionError: formSubmissionError || null,
             loginFormInput: loginFormInput || {}
         });

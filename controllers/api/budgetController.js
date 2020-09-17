@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-const debug = require('debug')('app:budgetController');
+const debug = require('debug')('app:apiBudgetController');
 const { User, Budget } = require('../../models');
 
 function validateCreateBudgetFormInput(createBudgetFormInput) {
