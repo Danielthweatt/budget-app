@@ -14,7 +14,11 @@
                         <ul class="menu-list">
                         {{#if user.budgets.length}}
                             {{#each user.budgets}}  
-                                <li><a href="/manage-budget/{{this._id}}">{{this.name}} - ${{this.monthlyAmount}}</a></li>
+                                <li>
+                                    <a href="/manage-budget/{{this._id}}">
+                                        {{this.name}} - ${{this.monthlyAmount}}
+                                    </a>
+                                </li>
                             {{/each}}
                         {{/if}}
                         </ul>
@@ -58,10 +62,11 @@
                                                 class="input" 
                                                 type="number" 
                                                 name="monthlyAmount" 
-                                                placeholder="Monthly Amount (Optional)"
-                                                title="Optional."
+                                                placeholder="Monthly Amount"
+                                                title="A positive number."
                                                 step="0.01"
                                                 min="1"
+                                                required
                                             >
                                         </div>
                                     </div>
@@ -103,17 +108,23 @@
                 success: function(data) {
                     budgetMenu.find('p').remove();
                     budgetMenu.find('ul')
-                                .append('<li><a href="/manage-budget/' + data._id + '">' + data.name + ' - $' + data.monthlyAmount + '</a></li>');
+                                .append(
+                                    '<li><a href="/manage-budget/' + 
+                                    data._id + 
+                                    '">' + 
+                                    data.name + 
+                                    ' - ' + 
+                                    util.formatUSDCurrency(data.monthlyAmount) + 
+                                    '</a></li>'
+                                );
                     createBudgetModal.find('.close-modal').eq(0).click();
                 },
                 error: function(jqXHR) {
                     if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
-                        jqXHR.responseJSON.error.details.forEach(function(detail) {
-                            createBudgetFormSubmissionErrors.find('ul')
-                                                                .empty()
-                                                                .append('<li>' + detail.message + '</li>');
-                            createBudgetFormSubmissionErrors.removeClass('is-hidden');
-                        });
+                        util.clearAndDisplayFormSubmissionErrors(
+                            createBudgetFormSubmissionErrors,
+                            jqXHR.responseJSON.error    
+                        );
                     }
                 }
             })

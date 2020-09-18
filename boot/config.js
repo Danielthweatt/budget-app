@@ -41,7 +41,13 @@ module.exports = app => {
     debug('Middleware registered...');
     
     //Template Engine
-    app.engine('handlebars', exphbs());
+    app.engine('handlebars', exphbs({
+        helpers: {
+            json(obj) {
+                return JSON.stringify(obj);
+            }
+        }
+    }));
     app.set('view engine', 'handlebars')
     
     debug('Template engine configured...');
