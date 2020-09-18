@@ -1,5 +1,38 @@
 <section class="section">
     <div class="container">
         <h1 class="title is-1">Manage Budget - {{ budget.name }}</h1>
+        <div class="tile is-ancestor">
+            <div class="tile is-8 is-parent">
+                <div class="tile is-child box">
+                    <h2 class="title is-2">Purchase Categories</h2>
+                    <canvas id="purchaseCategoriesPieChart"></canvas>
+                </div>
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-child box">
+                    <h2 class="title is-2">Recent Purchases</h2>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
+<script>
+    //Page scripts
+    $(document).ready(function() {
+        var purchaseCategoriesPieChartCanvas = $('#purchaseCategoriesPieChart');
+        //TODO: Load data
+        var purchaseCategoriesPieChartData = {
+            datasets: [{
+                data: [10, 20, 30],
+                backgroundColor: ['rgb(255, 99, 132)', 'rgb(255, 205, 86)', 'rgb(54, 162, 235)']
+            }],
+            labels: ['Give', 'Use', 'Save']
+        };
+        var purchaseCategoriesPieChartOptions = {};
+        var purchaseCategoriesPieChart = util.createPieChart(
+            purchaseCategoriesPieChartCanvas, 
+            purchaseCategoriesPieChartData, 
+            purchaseCategoriesPieChartOptions
+        );
+    });
+</script>
