@@ -21,13 +21,50 @@
                 </div>
             </div>
         </div>
+        <h2 class="title is-2">Purchases</h2>
         <div class="tile is-ancestor">
+            <div class="tile is-3 is-parent">
+                <div class="tile is-child box">
+                    <div id="purchasesMenu" class="menu">
+                        <p class="menu-label">
+                            You have not made any purchases this month!
+                        </p>
+                    </div>
+                </div>
+            </div>
             <div class="tile is-parent">
                 <div class="tile is-child box">
-                    <h2 class="title is-2">Purchase Categories</h2>
-                    {{#unless budget.purchaseCategories.length}}
-                        <p>You have not added any Purchase Categories yet!</p>
-                    {{/unless}}
+                </div>
+            </div>
+        </div>
+        <h2 class="title is-2">Purchase Categories</h2>
+        <div class="tile is-ancestor">
+            <div class="tile is-3 is-parent">
+                <div class="tile is-child box">
+                    <div id="purchaseCategoriesMenu" class="menu">
+                        <p class="menu-label">
+                        {{#if budget.purchaseCategories.length}}
+                            Category - Monthly Amount
+                        {{else}}
+                            You have not added any purchase categories yet!
+                        {{/if}}
+                        </p>
+                        <ul class="menu-list">
+                        {{#if budget.purchaseCategories.length}}
+                            {{#each budget.purchaseCategories}}  
+                                <li>
+                                    <a>
+                                        {{this.name}} - {{{USD this.monthlyAmount}}}
+                                    </a>
+                                </li>
+                            {{/each}}
+                        {{/if}}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="tile is-parent">
+                <div class="tile is-child box">
                     <canvas 
                         id="purchaseCategoriesPieChart" 
                     {{#unless budget.purchaseCategories.length}}
@@ -43,7 +80,25 @@
     //Page variables
     var budget = {{{json budget}}};
     var purchaseCategoriesPieChartCanvas;
-    var purchaseCategoriesPieChartOptions = {};
+    var purchaseCategoriesPieChartOptions = {
+        legend: {
+            display: false
+        },
+        tooltips: {
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    var datasetIndex = tooltipItem.datasetIndex;
+                    var dataIndex = tooltipItem.index;
+
+                    return (
+                        data.labels[dataIndex] + 
+                        ': ' + 
+                        util.formatUSDCurrency(data.datasets[datasetIndex].data[dataIndex])
+                    );
+                }
+            }
+        }
+    };
     var purchaseCategoriesPieChart;
 
     //Page functions

@@ -11,6 +11,9 @@
                 <div class="tile is-child box">
                     <h2 class="title is-2">Budgets</h2>
                     <div id="budgetMenu" class="menu">
+                    {{#unless user.budgets.length}}
+                        <p class="menu-label">You have not created any budgets yet!</p>
+                    {{/unless}}
                         <ul class="menu-list">
                         {{#if user.budgets.length}}
                             {{#each user.budgets}}  
@@ -22,9 +25,6 @@
                             {{/each}}
                         {{/if}}
                         </ul>
-                    {{#unless user.budgets.length}}
-                        <p class="menu-label">You have not created any budgets yet!</p>
-                    {{/unless}}
                     </div>
                     <button 
                         class="button is-dark is-small is-fullwidth mt-5 open-modal"
