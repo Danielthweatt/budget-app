@@ -16,7 +16,7 @@
                             {{#each user.budgets}}  
                                 <li>
                                     <a href="/manage-budget/{{this._id}}">
-                                        {{this.name}} - ${{this.monthlyAmount}}
+                                        {{this.name}} - {{{USD this.monthlyAmount}}}
                                     </a>
                                 </li>
                             {{/each}}
