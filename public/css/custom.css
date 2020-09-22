@@ -11,7 +11,3 @@ main {
     flex: 1;
 }
 /* ------ */
-
-ul li {
-    list-style: disc inside;
-}

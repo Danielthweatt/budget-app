@@ -15,6 +15,8 @@ require('./boot/routes')(app);
 
 //Start
 const PORT = config.get('server.port');
-const server = app.listen(PORT, () => debug(`Listening on Port ${PORT}...`));
+const server = app.listen(PORT, () => {
+    debug(`Listening on Port ${PORT}...`);
+});
 
 module.exports = server;

@@ -7,22 +7,20 @@
                     {{> form-submission-errors}}
                 {{/if}}
                 <form method="POST" action="/login">
-                    {{#with loginFormInput}}
-                        <div class="field">
-                            <div class="control">
-                                <input 
-                                    class="input" 
-                                    type="text" 
-                                    name="username" 
-                                    {{#if username}} 
-                                        value="{{username}}" 
-                                    {{/if}} 
-                                    placeholder="Username"
-                                    required
-                                >
-                            </div>
+                    <div class="field">
+                        <div class="control">
+                            <input 
+                                class="input" 
+                                type="text" 
+                                name="username" 
+                                {{#if loginFormInput.username}} 
+                                    value="{{loginFormInput.username}}" 
+                                {{/if}} 
+                                placeholder="Username"
+                                required
+                            >
                         </div>
-                    {{/with}}
+                    </div>
                     <div class="field">
                         <div class="control">
                             <input 

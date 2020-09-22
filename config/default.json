@@ -7,5 +7,7 @@
     },
     "session": {
         "secret": "aSecretString"
-    }
+    },
+    "404Message": "Not found.",
+    "500Message": "Internal error."
 }

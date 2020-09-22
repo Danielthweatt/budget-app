@@ -3,27 +3,131 @@
         <h1 class="title is-1">Hello {{user.username}}</h1>
         <div class="tile is-ancestor">
             <div class="tile is-8 is-parent">
-                <article class="tile is-child box">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam semper diam at erat 
-                        pulvinar, at pulvinar felis blandit. Vestibulum volutpat tellus diam, consequat 
-                        gravida libero rhoncus ut. Morbi maximus, leo sit amet vehicula eleifend, nunc dui 
-                        porta orci, quis semper odio felis ut quam.</p>
-                    <br>
-                    <p>Suspendisse varius ligula in molestie lacinia. Maecenas varius eget ligula a 
-                        sagittis. Pellentesque interdum, nisl nec interdum maximus, augue diam porttitor 
-                        lorem, et sollicitudin felis neque sit amet erat. Maecenas imperdiet felis nisi, 
-                        fringilla luctus felis hendrerit sit amet. Aenean vitae gravida diam, finibus 
-                        dignissim turpis. Sed eget varius ligula, at volutpat tortor.</p>
-                </article>
+                <div class="tile is-child box">
+                    <h2 class="title is-2">Recent Purchases</h2>
+                </div>
             </div>
             <div class="tile is-parent">
-                <aside class="tile is-child box">
-                    <p>Integer sollicitudin, tortor a mattis commodo, velit urna rhoncus erat, vitae congue 
-                        lectus dolor consequat libero. Donec leo ligula, maximus et pellentesque sed, gravida 
-                        a metus. Cras ullamcorper a nunc ac porta. Aliquam ut aliquet lacus, quis faucibus 
-                        libero. Quisque non semper leo.</p>
-                </aside>
+                <div class="tile is-child box">
+                    <h2 class="title is-2">Budgets</h2>
+                    <div id="budgetMenu" class="menu">
+                    {{#unless user.budgets.length}}
+                        <p class="menu-label">You have not created any budgets yet!</p>
+                    {{/unless}}
+                        <ul class="menu-list">
+                        {{#if user.budgets.length}}
+                            {{#each user.budgets}}  
+                                <li>
+                                    <a href="/manage-budget/{{this._id}}">
+                                        {{this.name}} - {{{USD this.monthlyAmount}}}
+                                    </a>
+                                </li>
+                            {{/each}}
+                        {{/if}}
+                        </ul>
+                    </div>
+                    <button 
+                        class="button is-dark is-small is-fullwidth mt-5 open-modal"
+                        data-target-modal="createBudgetModal"    
+                    >
+                        Create Budget
+                    </button>
+                    <div id="createBudgetModal" class="modal">
+                        <div class="modal-background close-modal" data-target-modal="createBudgetModal"></div>
+                        <div class="modal-card">
+                            <header class="modal-card-head">
+                                <p class="modal-card-title">Create Budget</p>
+                                <button class="delete close-modal" data-target-modal="createBudgetModal"></button>
+                            </header>
+                            <section class="modal-card-body">
+                                {{> form-submission-errors}}
+                                <form id="createBudgetForm">
+                                    <div class="field">
+                                        <div class="control">
+                                            <input 
+                                                class="input" 
+                                                type="text" 
+                                                name="name" 
+                                                placeholder="Name"
+                                                title="3 to 50 characters."
+                                                minlength="3"
+                                                maxlength="50"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <input 
+                                                class="input" 
+                                                type="number" 
+                                                name="monthlyAmount" 
+                                                placeholder="Monthly Amount"
+                                                title="A positive number."
+                                                step="0.01"
+                                                min="1"
+                                                required
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="field is-grouped">
+                                        <div class="control">
+                                            <input class="button is-dark" type="submit" value="Create">
+                                        </div>
+                                        <div class="control">
+                                            <button class="button close-modal" data-target-modal="createBudgetModal">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </section>
+                            <footer class="modal-card-foot"></footer>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
+<script>
+    //Page scripts
+    $(document).ready(function() {
+        var budgetMenu = $('#budgetMenu');
+        var createBudgetModal = $('#createBudgetModal');
+        var createBudgetFormSubmissionErrors = createBudgetModal.find('#formSubmissionErrors');
+        var createBudgetForm = $('#createBudgetForm');
+
+        createBudgetForm.submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/api/budget',
+                method: 'POST',
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                data: createBudgetForm.serialize(),
+                success: function(data) {
+                    budgetMenu.find('p').remove();
+                    budgetMenu.find('ul')
+                                .append(
+                                    '<li><a href="/manage-budget/' + 
+                                    data._id + 
+                                    '">' + 
+                                    data.name + 
+                                    ' - ' + 
+                                    util.formatUSDCurrency(data.monthlyAmount) + 
+                                    '</a></li>'
+                                );
+                    createBudgetModal.find('.close-modal').eq(0).click();
+                },
+                error: function(jqXHR) {
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
+                        util.clearAndDisplayFormSubmissionErrors(
+                            createBudgetFormSubmissionErrors,
+                            jqXHR.responseJSON.error    
+                        );
+                    }
+                }
+            })
+        });
+    });
+</script>

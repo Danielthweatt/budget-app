@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
-const debug = require('debug')('app:userController');
-const { User } = require('../models');
+const debug = require('debug')('app:webUserController');
+const { User } = require('../../models');
 
 function validateSignUpFormInput(signUpFormInput) {
     const signUpFormInputSchema = Joi.object({
@@ -27,14 +27,14 @@ function validateSignUpFormInput(signUpFormInput) {
         password: Joi.string()
                         .min(8)
                         .max(50)
-                        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).+$/)
+                        .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?!.*[!@#$%^&*()]).+$/)
                         .required()
                         .messages({
                             'string.base': 'Password must be text.',
                             'string.empty': 'Must have a password.',
                             'string.min': 'Password must be at least 8 characters long.',
                             'string.max': 'Password must be at most 50 characters long.',
-                            'string.pattern.base': 'Password must include a lowercase letter, an uppercase letter, and a number.',
+                            'string.pattern.base': 'Password must include a lowercase letter, an uppercase letter, a number, and no special characters: !@#$%^&*()',
                             'any.required': 'Must have a password.'
                         }),
         confirmPassword: Joi.ref('password')
@@ -85,6 +85,7 @@ module.exports = {
 
         res.render('sign-up-form', { 
             title: 'Sign Up',
+            user: req.session.user,
             formSubmissionError: formSubmissionError || null,
             signUpFormInput: signUpFormInput || {}
         });
@@ -102,7 +103,9 @@ module.exports = {
         if (error) {
             debug('Validation errors:');
 
-            error.details.forEach(({ message }) => debug(` ${message}`));
+            error.details.forEach(({ message }) => {
+                debug(` ${message}`); 
+            });
 
             debug('Redirecting to sign-up form...');
             
@@ -137,8 +140,9 @@ module.exports = {
         debug('User does not already exist...');
         debug('Creating user...');
 
-        user = new User({ username, email, password });
-        
+        user = new User({ username, email });
+        user.password = await User.hashPassword(password);
+
         await user.save();
 
         debug('User created succesfully...');
@@ -149,10 +153,7 @@ module.exports = {
                 return next(err);
             }
 
-            req.session.user = {
-                _id: user._id,
-                username: user.username
-            };
+            req.session.user = user.getPublicObject();
     
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
@@ -169,6 +170,7 @@ module.exports = {
 
         res.render('login-form', { 
             title: 'Login',
+            user: req.session.user,
             formSubmissionError: formSubmissionError || null,
             loginFormInput: loginFormInput || {}
         });
@@ -186,7 +188,9 @@ module.exports = {
         if (error) {
             debug('Validation errors:');
 
-            error.details.forEach(({ message }) => debug(` ${message}`));
+            error.details.forEach(({ message }) => { 
+                debug(` ${message}`); 
+            });
 
             debug('Redirecting to login form...');
             
@@ -199,7 +203,7 @@ module.exports = {
         debug('Login form input valid...');
         debug('Checking if user exists...');
 
-        let user = await User.findOne({ username });
+        let user = await User.findOne({ username }).populate('budgets');
 
         if (!user) {
             debug('User does not exist...');
@@ -244,18 +248,15 @@ module.exports = {
                 return next(err);
             }
 
-            req.session.user = {
-                _id: user._id,
-                username: user.username
-            };
-    
+            req.session.user = user.getPublicObject();
+
             debug('User logged in and session regenerated...');
             debug('Redirecting to dashboard...');
     
             res.redirect('/dashboard');
         });
     },
-    getDashboard(req, res) {
+    async getDashboard(req, res) {
         debug('getDashboard()');
         debug('Rendering dashboard view...');
 

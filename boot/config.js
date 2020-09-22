@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const exphbs = require('express-handlebars');
 const debug = require('debug')('app:boot');
 const sessionMiddleware = require('../middleware/session');
+const util = require('../util');
 
 module.exports = app => {
     //Middleware
@@ -41,7 +42,16 @@ module.exports = app => {
     debug('Middleware registered...');
     
     //Template Engine
-    app.engine('handlebars', exphbs());
+    app.engine('handlebars', exphbs({
+        helpers: {
+            json(obj) {
+                return JSON.stringify(obj);
+            },
+            USD(amount) {
+                return util.formatUSDCurrency(amount);
+            }
+        }
+    }));
     app.set('view engine', 'handlebars')
     
     debug('Template engine configured...');
