@@ -6,6 +6,7 @@ module.exports = asyncHandler => {
             await asyncHandler(req, res, next);
         } catch(err) {
             debug('Passing caught error to error middleware...');
+            
             next(err);
         }
     };

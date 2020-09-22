@@ -1,7 +1,9 @@
-<div class="notification is-danger is-light">
+<div id="formSubmissionErrors" class="notification is-danger is-light {{#unless formSubmissionError.details.length}}is-hidden{{/unless}}">
     <ul>
+    {{#if formSubmissionError.details.length}}
         {{#each formSubmissionError.details}}  
             <li>{{this.message}}</li>
         {{/each}}
+    {{/if}}
     </ul>
 </div>

@@ -4,14 +4,23 @@ const purchaseCategorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        minlength: 2,
+        minlength: 3,
         maxlength: 50
     },
     monthlyAmount: {
         type: Number,
-        min: 0.01
+        default: 0.00
     }
 });
+
+//Instance methods
+purchaseCategorySchema.methods.getPublicObject = function() {
+    return {
+        _id: this._id,
+        name: this.name,
+        monthlyAmount: this.monthlyAmount
+    };
+};
 
 module.exports = {
     purchaseCategorySchema,

@@ -7,5 +7,7 @@
     },
     "session": {
         "secret": "SESSION_SECRET"
-    }
+    },
+    "404Message": "404_MESSAGE",
+    "500Message": "500_MESSAGE"
 }
